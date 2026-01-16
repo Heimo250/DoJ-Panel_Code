@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <title>MDT – DoJ & LSPD</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    /* Dein CSS unverändert */
+<meta charset="UTF-8" />
+<title>MDT – DoJ & LSPD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
     :root {
       --bg:#05070f;
       --surface:#0b1220;
@@ -146,11 +145,11 @@ button.action{
     <div id="userInfo"></div>
   </header>
 
-  <section id="login">
+   <section id="login">
     <h3>Login</h3>
     <input id="username" placeholder="Benutzername" />
     <input id="password" type="password" placeholder="Passwort" />
-    <button onclick="login()">Einloggen</button>
+    <button id="loginBtn">Einloggen</button>
   </section>
 
   <nav id="mainNav" class="hidden">
@@ -164,108 +163,102 @@ button.action{
     <button onclick="show('judge')">⚖️ Richter</button>
   </nav>
 
-<section id="dashboard" class="hidden">
-  <h3>Startseite</h3>
-  <input placeholder="Person suchen" />
-  <input placeholder="Kennzeichen suchen" />
-  <input placeholder="Wanted suchen" />
-  <input placeholder="Law suchen" />
+ <section id="dashboard" class="hidden">
+    <h3>Startseite</h3>
+    <input placeholder="Person suchen" />
+    <input placeholder="Kennzeichen suchen" />
+    <input placeholder="Wanted suchen" />
+    <input placeholder="Law suchen" />
 </section>
 
 <section id="employees" class="hidden">
-  <h3>👮 Beamten-Management</h3>
+    <h3>👮 Beamten-Management</h3>
+    <h4>Eigene Notizen</h4>
+    <textarea id="myNotes" placeholder="Private Notizen (nur für dich sichtbar)"></textarea>
+    <hr />
+    <h4>Beamten registrieren</h4>
+    <input id="empUsername" placeholder="Benutzername" />
+    <input id="empPassword" placeholder="Startpasswort" />
+    <select id="empRank">
+      <option>LSPD Officer</option>
+      <option>Detective</option>
+      <option>Sergeant</option>
+      <option>Marshal Officer</option>
+      <option>Marshal Deputy</option>
+      <option>Attorney</option>
+      <option>Judge</option>
+    </select>
+    <button onclick="registerEmployee()">Registrieren</button>
+    <hr />
+    <h4>Beamte verwalten</h4>
+    <div id="employeeList"></div>
+  </section>
 
-  <h4>Eigene Notizen</h4>
-  <textarea id="myNotes" placeholder="Private Notizen (nur für dich sichtbar)"></textarea>
-
-  <hr />
-
-  <h4>Beamten registrieren</h4>
-  <input id="empUsername" placeholder="Benutzername" />
-  <input id="empPassword" placeholder="Startpasswort" />
-  <select id="empRank">
-    <option>LSPD Officer</option>
-    <option>Detective</option>
-    <option>Sergeant</option>
-    <option>Marshal Officer</option>
-    <option>Marshal Deputy</option>
-    <option>Attorney</option>
-    <option>Judge</option>
-  </select>
-  <button onclick="registerEmployee()">Registrieren</button>
-
-  <hr />
-
-  <h4>Beamte verwalten</h4>
-  <div id="employeeList"></div>
+ <section id="laws" class="hidden">
+    <h3>Panel Code</h3>
+    <input placeholder="Law suchen" />
+    <div id="lawList"></div>
+  </section>
+  
+ <section id="reports" class="hidden">
+    <h3>Einsatzberichte</h3>
+    <textarea placeholder="Einsatzbericht (Vorlage je Rang)"></textarea>
+    <button>Speichern</button>
 </section>
 
-<section id="laws" class="hidden">
-  <h3>Panel Code</h3>
-  <input placeholder="Law suchen" />
-  <div id="lawList"></div>
-</section>
+ <section id="persons" class="hidden">
+    <h3>Personenregister</h3>
+    <input placeholder="Foto URL (optional)" />
+    <input placeholder="Vorname" />
+    <input placeholder="Nachname" />
+    <input placeholder="Geburtsdatum" />
+    <input placeholder="Größe" />
+    <input placeholder="Alias" />
+    <input placeholder="Wohnhaft" />
+    <button>Person anlegen</button>
+  </section>
 
-<section id="reports" class="hidden">
-  <h3>Einsatzberichte</h3>
-  <textarea placeholder="Einsatzbericht (Vorlage je Rang)"></textarea>
-  <button>Speichern</button>
-</section>
+ <section id="vehicles" class="hidden">
+    <h3>Fahrzeugregister</h3>
+    <input placeholder="Marke" />
+    <input placeholder="Modell" />
+    <input placeholder="Farbe" />
+    <input placeholder="Kennzeichen" />
+    <button>Fahrzeug registrieren</button>
+  </section>
 
-<section id="persons" class="hidden">
-  <h3>Personenregister</h3>
-  <input placeholder="Vorname" />
-  <input placeholder="Nachname" />
-  <input placeholder="Geburtsdatum" />
-  <input placeholder="Größe" />
-  <input placeholder="Foto URL (optional)" />
-  <button>Person anlegen</button>
-</section>
-
-<section id="vehicles" class="hidden">
-  <h3>Fahrzeugregister</h3>
-  <input placeholder="Marke" />
-  <input placeholder="Modell" />
-  <input placeholder="Farbe" />
-  <input placeholder="Kennzeichen" />
-  <button>Fahrzeug registrieren</button>
-</section>
-
-<section id="wanted" class="hidden">
-  <h3>🚨 Live-Fahndung</h3>
-  <div id="wantedList"></div>
-  <hr />
-  <h4>🔔 Auto-Alerts</h4>
-  <input id="plateCheck" placeholder="Kennzeichen prüfen" />
-  <button onclick="checkPlate()">Check</button>
-  <div id="alertBox"></div>
-</section>
-
-<section id="judge" class="hidden">
-  <h3>⚖️ Richter-Dashboard</h3>
-
-  <h4>Haftbefehl</h4>
-  <input id="judgePerson" placeholder="Person ID" />
-  <textarea id="judgeReason" placeholder="Begründung"></textarea>
-  <button onclick="issueWarrant(judgePerson.value,'Richter')">Haftbefehl ausstellen</button>
-
-  <hr />
-
-  <h4>Ermittlung sperren / freigeben</h4>
-  <input id="caseId" placeholder="Ermittlungs-ID" />
-  <select id="caseAction">
-    <option value="lock">Sperren</option>
-    <option value="unlock">Freigeben</option>
-  </select>
-  <button onclick="toggleCase()">Ausführen</button>
-</section>
-
+ <section id="wanted" class="hidden">
+    <h3>🚨 Live-Fahndung</h3>
+    <select id="wantedPerson"></select>
+    <textarea id="wantedReason" placeholder="Grund für Fahndung"></textarea>
+    <button id="flagWantedBtn">Fahndung auslösen</button>
+    <hr />
+    <h4>🔔 Auto-Alerts</h4>
+    <select id="vehicleSelect"></select>
+    <button id="checkPlateBtn">Check</button>
+    <div id="alertBox"></div>
+  </section>
+  
+  <section id="judge" class="hidden">
+    <h3>⚖️ Richter-Dashboard</h3>
+    <h4>Haftbefehl</h4>
+    <select id="judgePerson"></select>
+    <textarea id="judgeReason" placeholder="Begründung"></textarea>
+    <button id="issueWarrantBtn">Haftbefehl ausstellen</button>
+    <hr />
+    <h4>Ermittlung sperren / freigeben</h4>
+    <select id="caseId"></select>
+    <select id="caseAction">
+      <option value="lock">Sperren</option>
+      <option value="unlock">Freigeben</option>
+    </select>
+    <button id="toggleCaseBtn">Ausführen</button>
+  </section>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getFirestore, collection, doc, addDoc, setDoc, getDocs, Timestamp, updateDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
+import { getFirestore, collection, doc, addDoc, getDocs, updateDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 // ===== FIREBASE CONFIG =====
 const firebaseConfig = {
   apiKey: "AIzaSyCNYAjMBgtIh64g-siP9CytOZfyRKx-BSg",
@@ -281,37 +274,31 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ===== MDT LOGIN & NAVIGATION =====
-window.login = async () => {
-  document.getElementById('login').classList.add('hidden');
-  document.getElementById('mainNav').classList.remove('hidden');
-  show('dashboard');
-}
+// ===== LOGIN =====
+document.getElementById('loginBtn').addEventListener('click', async () => {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
 
-window.show = (id) => {
-  document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-}
+  // Einfaches Firestore-Login: Mitarbeitername + optional Passwort
+  const snapshot = await getDocs(collection(db, "employees"));
+  let found = false;
+  snapshot.forEach(docSnap => {
+    const e = docSnap.data();
+    if (e.username === username && (!e.password || e.password === password)) {
+      found = true;
+      document.getElementById('userInfo').textContent = `Eingeloggt: ${username} | Rang: ${e.rank}`;
+    }
+  });
 
-// ===== REGISTER EMPLOYEE =====
-window.registerEmployee = async () => {
-  const username = document.getElementById('empUsername').value;
-  const rank = document.getElementById('empRank').value;
-  if (!username) return alert("Bitte Benutzername eingeben!");
-
-  try {
-    await addDoc(collection(db, "employees"), {
-      username,
-      rank,
-      createdAt: Timestamp.now()
-    });
-    alert(`Benutzer ${username} erfolgreich registriert!`);
-    loadEmployees();
-  } catch(err) {
-    console.error("Fehler beim Registrieren:", err);
+  if (found) {
+    document.getElementById('login').classList.add('hidden');
+    document.getElementById('mainNav').classList.remove('hidden');
+    show('dashboard');
+  } else {
+    alert("Benutzername oder Passwort falsch!");
   }
-}
-
+});
+  
 // ===== LOAD EMPLOYEES =====
 const employeeList = document.getElementById('employeeList');
 async function loadEmployees() {
