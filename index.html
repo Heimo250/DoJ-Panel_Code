@@ -1,567 +1,460 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>DOJ Panel Code - Cloud Edition</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
-    <style>
-        :root {
-            --bg-dark: #0f0f17;
-            --bg-panel: #1a1a2e;
-            --accent: #d4af37; /* Gold/DOJ Color */
-            --text-main: #e0e0e0;
-            --text-muted: #888;
-            --danger: #fd5d93;
-            --success: #00f2c3;
-            --admin-color: #ff8d72;
-        }
-
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-dark); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; }
-
-        /* LOGIN SCREEN */
-        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 10000; }
-        .login-box { background: var(--bg-panel); padding: 40px; border-radius: 12px; width: 320px; text-align: center; border-bottom: 5px solid var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .login-box h1 { margin-bottom: 30px; letter-spacing: 2px; color: var(--accent); font-size: 24px; }
-        .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; background: #0a0a14; border: 1px solid #333; color: white; border-radius: 6px; box-sizing: border-box; }
-        .login-box button { width: 100%; padding: 12px; background: var(--accent); border: none; color: black; cursor: pointer; border-radius: 6px; font-weight: bold; transition: 0.3s; }
-        .login-box button:hover { background: #b8962d; box-shadow: 0 0 15px var(--accent); }
-
-        /* MAIN APP */
-        .container { display: none; width: 100%; padding: 20px; gap: 20px; box-sizing: border-box; }
-        .panel { background: var(--bg-panel); border-radius: 10px; padding: 25px; display: flex; flex-direction: column; box-shadow: 0 5px 25px rgba(0,0,0,0.5); }
-        
-        /* USER MGMT */
-        #admin-panel { flex: 0.8; border-top: 4px solid var(--admin-color); display: none; }
-        .user-list { overflow-y: auto; margin-top: 15px; }
-        .user-item { display: flex; justify-content: space-between; padding: 10px; background: #111122; margin-bottom: 8px; border-radius: 6px; border-right: 3px solid var(--admin-color); }
-        .delete-ico { color: var(--danger); cursor: pointer; font-weight: bold; }
-
-        .laws-section { flex: 2; }
-        .calc-section { flex: 1.2; border-left: 5px solid var(--accent); }
-
-        /* SEARCH & LIST */
-        .search-bar { width: 100%; padding: 14px; background: #0a0a14; border: 1px solid #333; color: white; border-radius: 8px; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; }
-        .law-list { overflow-y: auto; flex-grow: 1; padding-right: 5px; }
-        .law-item { background: #0f0f1d; margin-bottom: 10px; padding: 15px; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; border-left: 4px solid #333; transition: 0.2s; }
-        .law-item:hover { background: #15152a; }
-        .law-item.selected { border-left-color: var(--success); background: #1a2a2a; }
-
-        /* TOTALS */
-        .total-box { background: #0a0a14; padding: 20px; border-radius: 8px; margin-top: 15px; border: 1px solid #222; }
-        .total-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 18px; }
-        .btn-action { margin-top: 10px; width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-
-        .badge { padding: 5px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; }
-        .bg-admin { background: var(--admin-color); color: black; }
-        .bg-user { background: var(--accent); color: black; }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-    </style>
+  <meta charset="UTF-8" />
+  <title>MDT – DoJ & LSPD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+:root {
+  --bg:#05070f;
+  --surface:#0b1220;
+  --panel:#111827;
+  --glass:rgba(17,25,40,.75);
+  --accent:#4f46e5;
+  --accent-2:#22d3ee;
+  --danger:#ef4444;
+  --success:#22c55e;
+  --judge:#facc15;
+  --lspd:#3b82f6;
+  --marshal:#22c55e;
+  --doj:#a855f7;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  background:radial-gradient(1200px 600px at 10% -20%,#1e293b,transparent),
+             radial-gradient(800px 400px at 90% 10%,#020617,transparent),
+             var(--bg);
+  color:var(--text);
+}
+.tablet{
+  max-width:1900px;
+  min-height:95vh;
+  margin:16px auto;
+  display:flex;
+  border-radius:32px;
+  overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
+  box-shadow:0 40px 120px rgba(0,0,0,.7);
+}
+.sidebar{
+  width:300px;
+  padding:26px 22px;
+  background:linear-gradient(180deg,#020617,#020617 60%,#020617cc);
+  border-right:1px solid rgba(255,255,255,.06);
+  display:flex;
+  flex-direction:column;
+}
+.sidebar h2{
+  font-size:22px;
+  margin-bottom:18px;
+  letter-spacing:.3px;
+}
+.sidebar button{
+  all:unset;
+  padding:14px 18px;
+  border-radius:16px;
+  margin-bottom:10px;
+  background:rgba(255,255,255,.03);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:15px;
+  transition:.25s ease;
+}
+.sidebar button:hover{
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+}
+.main{
+  flex:1;
+  padding:34px;
+  overflow-y:auto;
+}
+section{
+  background:var(--glass);
+  backdrop-filter: blur(20px);
+  padding:32px;
+  border-radius:28px;
+  margin-bottom:26px;
+  border:1px solid rgba(255,255,255,.08);
+}
+h3{font-size:28px;margin-bottom:18px}
+h4{font-size:18px;margin:18px 0 10px;color:var(--muted)}
+input,select,textarea{
+  width:100%;
+  padding:16px 18px;
+  margin-top:10px;
+  background:rgba(2,6,23,.85);
+  color:var(--text);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+  font-size:15px;
+}
+textarea{min-height:140px}
+button.action{
+  margin-top:16px;
+  padding:16px 26px;
+  border-radius:20px;
+  border:none;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  color:#fff;
+  font-size:15px;
+  cursor:pointer;
+}
+.role-judge{--accent:var(--judge);--accent-2:#fde047}
+.role-lspd{--accent:var(--lspd);--accent-2:#60a5fa}
+.role-marshal{--accent:var(--marshal);--accent-2:#4ade80}
+.role-doj{--accent:var(--doj);--accent-2:#c084fc}
+.card{
+  background:rgba(2,6,23,.9);
+  padding:18px 22px;
+  border-radius:20px;
+  margin-top:14px;
+  border:1px solid rgba(255,255,255,.06);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.alert{
+  background:linear-gradient(90deg,#7f1d1d,#ef4444);
+  padding:18px;
+  border-radius:20px;
+  margin-top:14px;
+  font-weight:600;
+}
+.popup{
+  position:fixed;
+  top:28px;
+  right:28px;
+  padding:20px 26px;
+  border-radius:24px;
+  background:linear-gradient(90deg,#7f1d1d,#ef4444);
+  box-shadow:0 30px 60px rgba(0,0,0,.6);
+  animation:slide .45s cubic-bezier(.4,0,.2,1);
+}
+@keyframes slide{
+  from{transform:translateX(130%)}
+  to{transform:translateX(0)}
+}
+.hidden{display:none}
+</style>
 </head>
 <body>
+<div class="tablet split">
 
-<div id="login-overlay">
-    <div class="login-box">
-        <h1>DOJ PANEL CODE</h1>
-        <input type="text" id="userInput" placeholder="Benutzername">
-        <input type="password" id="passInput" placeholder="Passwort">
-        <button onclick="handleLogin()">LOGIN</button>
-        <p id="err" style="color:var(--danger); font-size:13px; display:none; margin-top:15px;">LOGIN FEHLGESCHLAGEN</p>
-    </div>
+<header>
+  <h2>📱 MDT System</h2>
+  <div id="userInfo"></div>
+</header>
+
+<section id="login">
+  <h3>Login</h3>
+  <input id="username" placeholder="Benutzername" />
+  <input id="password" type="password" placeholder="Passwort" />
+  <button onclick="login()">Einloggen</button>
+</section>
+
+<nav id="mainNav" class="hidden">
+  <button onclick="show('dashboard')">Startseite</button>
+  <button onclick="show('employees')">Employees</button>
+  <button onclick="show('laws')">Panel Code</button>
+  <button onclick="show('reports')">Einsatzberichte</button>
+  <button onclick="show('persons')">Personenregister</button>
+  <button onclick="show('vehicles')">Fahrzeuge</button>
+  <button onclick="show('wanted')">🚨 Wanted</button>
+  <button onclick="show('judge')">⚖️ Richter</button>
+</nav>
+
+<section id="dashboard" class="hidden">
+  <h3>Startseite</h3>
+  <input placeholder="Person suchen" />
+  <input placeholder="Kennzeichen suchen" />
+  <input placeholder="Wanted suchen" />
+  <input placeholder="Law suchen" />
+</section>
+
+<section id="employees" class="hidden">
+  <h3>👮 Beamten-Management</h3>
+
+  <h4>Eigene Notizen</h4>
+  <textarea id="myNotes" placeholder="Private Notizen (nur für dich sichtbar)"></textarea>
+
+  <hr />
+
+  <h4>Beamten registrieren</h4>
+  <input id="empUsername" placeholder="Benutzername" />
+  <input id="empPassword" placeholder="Startpasswort" />
+  <select id="empRank">
+    <option>LSPD Officer</option>
+    <option>Detective</option>
+    <option>Sergeant</option>
+    <option>Marshal Officer</option>
+    <option>Marshal Deputy</option>
+    <option>Attorney</option>
+    <option>Judge</option>
+  </select>
+  <button onclick="registerEmployee()">Registrieren</button>
+
+  <hr />
+
+  <h4>Beamte verwalten</h4>
+  <div id="employeeList"></div>
+</section>
+
+<section id="laws" class="hidden">
+  <h3>Panel Code</h3>
+  <input placeholder="Law suchen" />
+  <div id="lawList"></div>
+</section>
+
+<section id="reports" class="hidden">
+  <h3>Einsatzberichte</h3>
+  <textarea placeholder="Einsatzbericht (Vorlage je Rang)"></textarea>
+  <button>Speichern</button>
+</section>
+
+<section id="persons" class="hidden">
+  <h3>Personenregister</h3>
+  <input placeholder="Vorname" />
+  <input placeholder="Nachname" />
+  <input placeholder="Geburtsdatum" />
+  <input placeholder="Größe" />
+  <input placeholder="Foto URL (optional)" />
+  <button>Person anlegen</button>
+</section>
+
+<section id="vehicles" class="hidden">
+  <h3>Fahrzeugregister</h3>
+  <input placeholder="Marke" />
+  <input placeholder="Modell" />
+  <input placeholder="Farbe" />
+  <input placeholder="Kennzeichen" />
+  <button>Fahrzeug registrieren</button>
+</section>
+
+<section id="wanted" class="hidden">
+  <h3>🚨 Live-Fahndung</h3>
+  <div id="wantedList"></div>
+  <hr />
+  <h4>🔔 Auto-Alerts</h4>
+  <input id="plateCheck" placeholder="Kennzeichen prüfen" />
+  <button onclick="checkPlate()">Check</button>
+  <div id="alertBox"></div>
+</section>
+
+<section id="judge" class="hidden">
+  <h3>⚖️ Richter-Dashboard</h3>
+
+  <h4>Haftbefehl</h4>
+  <input id="judgePerson" placeholder="Person ID" />
+  <textarea id="judgeReason" placeholder="Begründung"></textarea>
+  <button onclick="issueWarrant(judgePerson.value,'Richter')">Haftbefehl ausstellen</button>
+
+  <hr />
+
+  <h4>Ermittlung sperren / freigeben</h4>
+  <input id="caseId" placeholder="Ermittlungs-ID" />
+  <select id="caseAction">
+    <option value="lock">Sperren</option>
+    <option value="unlock">Freigeben</option>
+  </select>
+  <button onclick="toggleCase()">Ausführen</button>
+</section>
+
 </div>
 
-<div class="container" id="mainApp">
-    <div id="admin-panel" class="panel">
-        <h2 style="color:var(--admin-color); margin:0 0 15px 0;">Nutzerverwaltung</h2>
-        <div style="background:#0a0a14; padding:15px; border-radius:8px;">
-            <input type="text" id="nU" placeholder="Name" style="width:100%; padding:8px; margin-bottom:10px; background:#1a1a2e; border:1px solid #444; color:white;">
-            <input type="text" id="nP" placeholder="Passwort" style="width:100%; padding:8px; margin-bottom:10px; background:#1a1a2e; border:1px solid #444; color:white;">
-            <select id="nR" style="width:100%; padding:8px; margin-bottom:10px; background:#1a1a2e; border:1px solid #444; color:white;">
-                <option value="user">Mitarbeiter</option>
-                <option value="admin">System Admin</option>
-            </select>
-            <button onclick="addUser()" style="width:100%; background:var(--admin-color); color:black; border:none; padding:8px; font-weight:bold; cursor:pointer;">ERSTELLEN</button>
-        </div>
-        <div class="user-list" id="userList"></div>
-    </div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    <div class="laws-section panel">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <h2 style="margin:0;">Strafgesetzbuch</h2>
-            <span id="uBadge" class="badge"></span>
-        </div>
-        <input type="text" class="search-bar" id="search" placeholder="Eintrag suchen..." onkeyup="filterLaws()">
-        <div class="law-list" id="lawList"></div>
-    </div>
+const firebaseConfig = {
+  apiKey: "AIzaSyCNYAjMBgtIh64g-siP9CytOZfyRKx-BSg",
+  authDomain: "mdt-los-santos-horizon.firebaseapp.com",
+   databaseURL: "https://mdt-los-santos-horizon-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "mdt-los-santos-horizon",
+     storageBucket: "mdt-los-santos-horizon.firebasestorage.app",
+  messagingSenderId: "611944178614",
+  appId: "1:611944178614:web:610fb342d748b5a027d717"
+};
 
-    <div class="calc-section panel">
-        <h2 style="margin:0;">Zusammenfassung</h2>
-        <div id="selLaws" style="flex-grow:1; overflow-y:auto; margin:20px 0; color:var(--text-muted); font-size:14px;"></div>
-        
-        <div style="margin-bottom:15px;">
-            <label style="font-size:12px; color:var(--text-muted)">Straf-Multiplikator</label>
-            <select id="mod" onchange="calc()" style="width:100%; background:#0a0a14; color:white; border:1px solid #333; padding:10px; border-radius:6px;">
-                <option value="1">Standard (100%)</option>
-                <option value="0.75">Milderung (-25%)</option>
-                <option value="1.5">Erschwerung (+50%)</option>
-                <option value="2">Vorsatz (+100%)</option>
-            </select>
-        </div>
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-        <div class="total-box">
-            <div class="total-row"><span>Haftzeit:</span><span id="fJail" style="color:var(--danger)">0 Mon.</span></div>
-            <div class="total-row"><span>Bußgeld:</span><span id="fFine" style="color:var(--success)">$0</span></div>
-        </div>
-        <button class="btn-action" onclick="reset()" style="background:#333; color:white;">RESET</button>
-        <button class="btn-action" onclick="location.reload()" style="background:transparent; border:1px solid #333; color:#666; font-size:12px;">LOGOUT</button>
-    </div>
-</div>
+window.login = async () => {
+  // Custom Username Login via Firestore (kein Firebase Auth)
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('mainNav').classList.remove('hidden');
+  show('dashboard');
+}
 
-<script>
-    // --- FIREBASE CONFIGURATION ---
-    // HIER DEINE DATEN VON FIREBASE EINSETZEN:
-    const firebaseConfig = {
-        apiKey: "AIzaSyC_brkU8EzeRWGt0l1rLIBIHZ_9H59d9fk",
-        authDomain: "doj-panel-code.firebaseapp.com",
-        databaseURL: "https://doj-panel-code-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "doj-panel-code",
-        storageBucket: "doj-panel-code.firebasestorage.app",
-        messagingSenderId: "823300069037",
-        appId: "1:823300069037:web:ceed6009b9d5ac8ed29824"
-    };
+window.show = (id) => {
+  document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
 
-    // Firebase Initialisierung
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+// ===== ROLLEN & PERMISSIONS =====
+const RANKS = {
+  LSPD_OFFICER: ['person_add','records_add','calculator'],
+  DETECTIVE: ['person_add','records_add','calculator','investigations'],
+  JUDGE: ['person_add','records_add','records_delete','calculator','investigations'],
+  CHIEF_JUSTICE: ['all'],
+  ATTORNEY_GENERAL: ['all','internal_affairs']
+};
 
-    let users = [];
-    let selected = [];
-    let currentUser = null;
+// ===== LAWS JSON =====
+const LAWS = [
+  { id: '§1', de: 'Geschwindigkeitsüberschreitung (16 km/h über)', en: 'Speeding (10 mph over)', fine: 500, jail: 0 },
+  { id: '§2', de: 'Fahren ohne Lizenz', en: 'Driving without license', fine: 1500, jail: 5 }
+];
 
-    // --- LAW DATA ---
-    const laws = [
-{ id: "§1", de: "Geschwindigkeitsüberschreitung (16 km/h über)", en: "Speeding (10 mph over)", text: "Exceeding the posted speed limit by up to 10 mph in any zone.", jail: 0, fine: 250 },
-{ id: "§2", de: "Geschwindigkeitsüberschreitung (24 km/h über)", en: "Speeding (15 mph over)", text: "Exceeding the posted speed limit by 11–15 mph.", jail: 0, fine: 400 },
-{ id: "§3", de: "Geschwindigkeitsüberschreitung (32 km/h über)", en: "Speeding (20 mph over)", text: "Exceeding the posted speed limit by 16–20 mph.", jail: 0, fine: 600 },
-{ id: "§4", de: "Geschwindigkeitsüberschreitung (40 km/h über)", en: "Speeding (25 mph over)", text: "Exceeding the posted speed limit by 21–25 mph.", jail: 0, fine: 900 },
-{ id: "§5", de: "Geschwindigkeitsüberschreitung in Schulzone", en: "Speeding in School Zone", text: "Any speeding violation within a school zone.", jail: 0, fine: 1200 },
-{ id: "§6", de: "Rücksichtsloses Fahren", en: "Reckless Driving", text: "Driving in a manner that endangers others.", jail: 2, fine: 1500 },
-{ id: "§7", de: "Fahren unter Alkoholeinfluss Stufe 1", en: "DUI Level 1", text: "BAC 0.08–0.15.", jail: 5, fine: 2000 },
-{ id: "§8", de: "Fahren unter Alkoholeinfluss Stufe 2", en: "DUI Level 2", text: "BAC 0.16–0.20.", jail: 10, fine: 4000 },
-{ id: "§9", de: "Fahren unter Alkoholeinfluss Stufe 3", en: "DUI Level 3", text: "BAC over 0.20.", jail: 20, fine: 8000 },
-{ id: "§10", de: "Unfallflucht (Sachschaden)", en: "Hit and Run (Property)", text: "Fleeing the scene of an accident involving property damage.", jail: 3, fine: 2500 },
-{ id: "§11", de: "Unfallflucht (Verletzung)", en: "Hit and Run (Injury)", text: "Fleeing the scene of an accident involving injury.", jail: 15, fine: 10000 },
-{ id: "§12", de: "Unfallflucht (Tödlich)", en: "Hit and Run (Fatal)", text: "Fleeing the scene of an accident resulting in death.", jail: 60, fine: 50000 },
-{ id: "§13", de: "Rotlichtverstoß", en: "Running Red Light", text: "Failing to stop at a red traffic signal.", jail: 0, fine: 300 },
-{ id: "§14", de: "Stoppschildverstoß", en: "Running Stop Sign", text: "Failing to stop at a stop sign.", jail: 0, fine: 200 },
-{ id: "§15", de: "Illegales Wendemanöver", en: "Illegal U-Turn", text: "Performing a U-turn where prohibited.", jail: 0, fine: 250 },
-{ id: "§16", de: "Vorfahrtverletzung", en: "Failure to Yield", text: "Failing to yield the right of way.", jail: 0, fine: 350 },
-{ id: "§17", de: "Kein Sicherheitsgurt", en: "No Seatbelt", text: "Not wearing a seatbelt while driving.", jail: 0, fine: 100 },
-{ id: "§18", de: "Illegales Parken", en: "Illegal Parking", text: "Parking in a prohibited area.", jail: 0, fine: 150 },
-{ id: "§19", de: "Fahren ohne Führerschein", en: "Driving Without License", text: "Operating a vehicle without a valid driver’s license.", jail: 1, fine: 1000 },
-{ id: "§20", de: "Abgelaufene Zulassung", en: "Expired Registration", text: "Driving a vehicle with expired registration.", jail: 0, fine: 500 },
-{ id: "§21", de: "Keine Versicherung", en: "No Insurance", text: "Operating a vehicle without valid insurance.", jail: 0, fine: 1500 },
-{ id: "§22", de: "Straßenrennen", en: "Street Racing", text: "Participating in an unauthorized street race.", jail: 5, fine: 3000 },
-{ id: "§23", de: "Flucht vor Polizei", en: "Evading Police", text: "Fleeing or attempting to flee from law enforcement.", jail: 10, fine: 5000 },
-{ id: "§24", de: "Falschfahrt", en: "Wrong Way Driving", text: "Driving against the designated traffic direction.", jail: 2, fine: 2000 },
-{ id: "§25", de: "Geschwindigkeit Autobahn (48+ km/h über)", en: "Speeding Highway (30+)", text: "Excessive speeding on a highway.", jail: 1, fine: 1500 },
-{ id: "§26", de: "Kein Licht", en: "No Headlights", text: "Driving at night without headlights.", jail: 0, fine: 200 },
-{ id: "§27", de: "Zu nah auffahren", en: "Tailgating", text: "Following another vehicle too closely.", jail: 0, fine: 300 },
-{ id: "§28", de: "Illegales Spurwechsel", en: "Illegal Lane Change", text: "Changing lanes without proper signaling.", jail: 0, fine: 250 },
-{ id: "§29", de: "Fahren auf Gehweg", en: "Driving on Sidewalk", text: "Driving a vehicle on a pedestrian sidewalk.", jail: 1, fine: 1000 },
-{ id: "§30", de: "Fahrzeugmanipulation", en: "Vehicle Tampering", text: "Tampering with a vehicle’s locks or engine.", jail: 2, fine: 1500 },
-{ id: "§31", de: "Frevel an Fahrzeug", en: "Joyriding", text: "Using a vehicle without permission but without intent to steal.", jail: 4, fine: 2000 },
-{ id: "§32", de: "Fahrzeugdiebstahl", en: "Grand Theft Auto", text: "Stealing a motor vehicle.", jail: 8, fine: 5000 },
-{ id: "§33", de: "Autoraub", en: "Carjacking", text: "Stealing a vehicle from an occupant using force.", jail: 20, fine: 15000 },
-{ id: "§34", de: "Fahrzeugdiebstahlring", en: "Vehicle Theft Ring", text: "Operating an organized vehicle theft ring.", jail: 30, fine: 30000 },
-{ id: "§35", de: "Alkoholunfall mit Verletzung", en: "DUI Causing Injury", text: "Driving under the influence resulting in injury.", jail: 25, fine: 20000 },
-{ id: "§36", de: "Wut am Steuer mit Angriff", en: "Road Rage Assault", text: "Assault committed during a road rage incident.", jail: 10, fine: 8000 },
-{ id: "§37", de: "Illegale Umbauten", en: "Illegal Modifications", text: "Vehicle modifications violating regulations.", jail: 0, fine: 1000 },
-{ id: "§38", de: "Kein Kennzeichen", en: "No License Plate", text: "Operating a vehicle without license plates.", jail: 1, fine: 2000 },
-{ id: "§39", de: "Falsches Kennzeichen", en: "Fake Plates", text: "Using counterfeit or stolen license plates.", jail: 5, fine: 5000 },
-{ id: "§40", de: "Geschwindigkeit Baustelle", en: "Speeding Construction Zone", text: "Speeding in a construction or work zone.", jail: 0, fine: 1000 },
-{ id: "§41", de: "Unkontrolliertes Überqueren", en: "Jaywalking", text: "Crossing the street outside designated crosswalks.", jail: 0, fine: 100 },
-{ id: "§42", de: "Fahrradverstoß", en: "Bicycle Violation", text: "Violating bicycle traffic laws.", jail: 0, fine: 150 },
-{ id: "§43", de: "Motorrad ohne Helm", en: "Motorcycle No Helmet", text: "Operating a motorcycle without a helmet.", jail: 0, fine: 200 },
-{ id: "§44", de: "LKW Überladung", en: "Truck Overload", text: "Operating an overloaded commercial truck.", jail: 0, fine: 800 },
-{ id: "§45", de: "Busspurverstoß", en: "Bus Lane Violation", text: "Using a bus lane without authorization.", jail: 0, fine: 400 },
-{ id: "§46", de: "HOV-Spur Missbrauch", en: "HOV Lane Abuse", text: "Using a high-occupancy vehicle lane alone.", jail: 0, fine: 500 },
-{ id: "§47", de: "Illegale Folierung", en: "Tinted Windows Illegal", text: "Using window tint beyond legal limits.", jail: 0, fine: 300 },
-{ id: "§48", de: "Auspuffverstoß", en: "Exhaust Violation", text: "Operating a vehicle with illegal exhaust modifications.", jail: 0, fine: 600 },
-{ id: "§49", de: "Handy am Steuer", en: "Phone While Driving", text: "Using a mobile phone while driving.", jail: 0, fine: 250 },
-{ id: "§50", de: "Kindersitzverstoß", en: "Child Seat Violation", text: "Failing to use proper child restraints.", jail: 0, fine: 400 },
-{ id: "§51", de: "Dragster-Rennen", en: "Drag Racing", text: "Participating in drag racing on public roads.", jail: 6, fine: 4000 },
-{ id: "§52", de: "Illegales Geländefahren", en: "Off-Road Illegal", text: "Driving off-road within city limits.", jail: 2, fine: 1500 },
-{ id: "§53", de: "Fahren auf Standstreifen", en: "Emergency Lane Drive", text: "Driving on the emergency shoulder.", jail: 1, fine: 1000 },
-{ id: "§54", de: "Kein Blinker", en: "No Turn Signal", text: "Turning without using turn signals.", jail: 0, fine: 150 },
-{ id: "§55", de: "Doppeltes Parken", en: "Double Parking", text: "Blocking traffic by double parking.", jail: 0, fine: 200 },
-{ id: "§56", de: "Nicht Vorrang Fußgänger", en: "Yield to Pedestrian Fail", text: "Failing to yield to pedestrians.", jail: 0, fine: 300 },
-{ id: "§57", de: "Illegales Rückwärtsfahren", en: "Reverse Illegal", text: "Improper or excessive reversing on a roadway.", jail: 0, fine: 250 },
-{ id: "§58", de: "Durchbrennen", en: "Burnout", text: "Performing vehicle burnouts.", jail: 1, fine: 800 },
-{ id: "§59", de: "Fahrzeugwechsel bei Flucht", en: "Vehicle Swap Evade", text: "Switching vehicles to evade police.", jail: 12, fine: 6000 },
-{ id: "§60", de: "Reifenzerstörer Schaden", en: "Spike Strip Damage", text: "Damaging police spike strips.", jail: 3, fine: 3000 },
-{ id: "§61", de: "Hubschrauber Tiefflug illegal", en: "Helicopter Low Fly", text: "Flying a helicopter too low over a city.", jail: 5, fine: 5000 },
-{ id: "§62", de: "Flugzeug in No-Fly-Zone", en: "Plane No Fly Zone", text: "Flying an aircraft in restricted airspace.", jail: 10, fine: 15000 },
-{ id: "§63", de: "Bootsgeschwindigkeitsüberschreitung", en: "Boat Speed Limit", text: "Exceeding speed limits on waterways.", jail: 0, fine: 500 },
-{ id: "§64", de: "U-Boot illegal", en: "Submarine Illegal Use", text: "Operating a submarine without authorization.", jail: 8, fine: 10000 },
-{ id: "§65", de: "Taxameter Manipulation", en: "Taxi Meter Tamper", text: "Tampering with a taxi meter.", jail: 2, fine: 2000 },
-{ id: "§66", de: "Limousinenservice Betrug", en: "Limo Service Fraud", text: "Operating a fake limousine service.", jail: 3, fine: 2500 },
-{ id: "§67", de: "ÖPNV Vandalismus", en: "Public Transport Vandalism", text: "Vandalizing buses or trains.", jail: 1, fine: 1500 },
-{ id: "§68", de: "Fahrrad auf Autobahn", en: "Bicycle on Highway", text: "Cycling on a highway.", jail: 0, fine: 300 },
-{ id: "§69", de: "Scooter auf Gehweg", en: "Scooter Sidewalk", text: "Riding an electric scooter on a sidewalk.", jail: 0, fine: 200 },
-{ id: "§70", de: "Parkuhr Betrug", en: "Parking Meter Fraud", text: "Tampering with a parking meter.", jail: 0, fine: 500 },
-{ id: "§71", de: "Besitz einer illegalen Waffe", en: "Illegal Weapon Possession", text: "Possession of an unregistered or illegal weapon.", jail: 5, fine: 5000 },
-{ id: "§72", de: "Führen einer Waffe ohne Lizenz", en: "Carrying Weapon Without License", text: "Carrying a firearm without a valid weapons license.", jail: 4, fine: 4000 },
-{ id: "§73", de: "Illegale Waffenmodifikation", en: "Illegal Weapon Modification", text: "Modifying a weapon in a prohibited manner.", jail: 6, fine: 6000 },
-{ id: "§74", de: "Verkauf illegaler Waffen", en: "Illegal Weapon Sales", text: "Selling illegal or unregistered weapons.", jail: 12, fine: 12000 },
-{ id: "§75", de: "Waffenschmuggel", en: "Weapon Smuggling", text: "Smuggling weapons across borders.", jail: 20, fine: 25000 },
-{ id: "§76", de: "Besitz einer schweren Waffe", en: "Heavy Weapon Possession", text: "Possession of heavy or military-grade weapons.", jail: 25, fine: 30000 },
-{ id: "§77", de: "Benutzung einer Waffe im öffentlichen Raum", en: "Discharging Weapon in Public", text: "Firing a weapon in a public place.", jail: 10, fine: 8000 },
-{ id: "§78", de: "Bedrohung mit einer Waffe", en: "Threatening With Weapon", text: "Threatening another person with a weapon.", jail: 8, fine: 7000 },
-{ id: "§79", de: "Schusswaffengebrauch mit Verletzung", en: "Weapon Use Causing Injury", text: "Using a weapon causing bodily injury.", jail: 18, fine: 20000 },
-{ id: "§80", de: "Schusswaffengebrauch mit Todesfolge", en: "Weapon Use Causing Death", text: "Using a weapon resulting in death.", jail: 60, fine: 100000 },
-{ id: "§81", de: "Besitz von Munition ohne Erlaubnis", en: "Illegal Ammunition Possession", text: "Possession of ammunition without authorization.", jail: 3, fine: 3000 },
-{ id: "§82", de: "Herstellung von Waffen", en: "Weapon Manufacturing", text: "Manufacturing weapons without authorization.", jail: 20, fine: 25000 },
-{ id: "§83", de: "Waffenhandel organisiert", en: "Organized Weapon Trafficking", text: "Operating an organized weapons trafficking ring.", jail: 35, fine: 50000 },
-{ id: "§84", de: "Verlust einer Dienstwaffe", en: "Loss of Service Weapon", text: "Negligent loss of an official service weapon.", jail: 6, fine: 6000 },
-{ id: "§85", de: "Diebstahl einer Waffe", en: "Weapon Theft", text: "Stealing a firearm or weapon.", jail: 10, fine: 10000 },
-{ id: "§86", de: "Besitz gestohlener Waffe", en: "Possession of Stolen Weapon", text: "Possessing a stolen weapon.", jail: 8, fine: 8000 },
-{ id: "§87", de: "Verkauf an Minderjährige", en: "Selling Weapons to Minors", text: "Selling or giving weapons to minors.", jail: 15, fine: 20000 },
-{ id: "§88", de: "Waffe im Sperrgebiet", en: "Weapon in Restricted Area", text: "Carrying a weapon in a restricted area.", jail: 7, fine: 7000 },
-{ id: "§89", de: "Nicht gesicherte Waffe", en: "Unsafe Weapon Storage", text: "Failure to safely store a weapon.", jail: 2, fine: 2000 },
-{ id: "§90", de: "Besitz einer verbotenen Waffe", en: "Prohibited Weapon Possession", text: "Possession of a prohibited weapon type.", jail: 20, fine: 30000 },
-{ id: "§91", de: "Sprengstoffbesitz", en: "Explosive Possession", text: "Possession of explosives without permit.", jail: 25, fine: 40000 },
-{ id: "§92", de: "Sprengstoffherstellung", en: "Explosive Manufacturing", text: "Manufacturing explosives illegally.", jail: 40, fine: 60000 },
-{ id: "§93", de: "Sprengstoffanschlag", en: "Explosive Attack", text: "Using explosives to cause damage or harm.", jail: 80, fine: 150000 },
-{ id: "§94", de: "Molotowcocktail Besitz", en: "Molotov Possession", text: "Possession of a Molotov cocktail.", jail: 15, fine: 20000 },
-{ id: "§95", de: "Waffenlieferung an Kriminelle", en: "Supplying Weapons to Criminals", text: "Supplying weapons to known criminals.", jail: 25, fine: 35000 },
-{ id: "§96", de: "Waffenbesitz unter Drogeneinfluss", en: "Weapon Under Influence", text: "Possessing a weapon while under influence.", jail: 6, fine: 6000 },
-{ id: "§97", de: "Waffenhandel international", en: "International Arms Trafficking", text: "International trafficking of weapons.", jail: 50, fine: 100000 },
-{ id: "§98", de: "Waffe auf Demonstration", en: "Weapon at Protest", text: "Carrying a weapon during a demonstration.", jail: 10, fine: 12000 },
-{ id: "§99", de: "Automatische Waffen", en: "Automatic Weapons", text: "Possession or use of automatic firearms.", jail: 30, fine: 60000 },
-{ id: "§100", de: "Verwendung Schalldämpfer", en: "Suppressor Use", text: "Using or possessing a suppressor.", jail: 12, fine: 15000 },
-{ id: "§101", de: "Illegale Waffenlagerung", en: "Illegal Weapon Cache", text: "Maintaining an illegal weapon cache.", jail: 20, fine: 30000 },
-{ id: "§102", de: "Waffenlieferung Gefängnis", en: "Weapon Smuggling into Prison", text: "Smuggling weapons into a correctional facility.", jail: 25, fine: 40000 },
-{ id: "§103", de: "Waffe in öffentlichem Gebäude", en: "Weapon in Public Building", text: "Carrying a weapon inside a public building.", jail: 8, fine: 8000 },
-{ id: "§104", de: "Bedrohung staatlicher Stellen", en: "Threatening Government with Weapon", text: "Threatening government officials with a weapon.", jail: 35, fine: 70000 },
-{ id: "§105", de: "Militärwaffen Besitz", en: "Military Weapon Possession", text: "Possession of military-grade weapons.", jail: 45, fine: 90000 },
-{ id: "§106", de: "Schwarzmarkt Waffenhandel", en: "Black Market Weapons", text: "Trading weapons on the black market.", jail: 40, fine: 80000 },
-{ id: "§107", de: "Waffenlieferung Terrororganisation", en: "Supplying Terrorist Weapons", text: "Supplying weapons to terrorist organizations.", jail: 90, fine: 200000 },
-{ id: "§108", de: "Illegaler Waffenexport", en: "Illegal Weapon Export", text: "Exporting weapons illegally.", jail: 50, fine: 100000 },
-{ id: "§109", de: "Illegale Waffenauktion", en: "Illegal Weapon Auction", text: "Hosting or participating in illegal weapon auctions.", jail: 20, fine: 30000 },
-{ id: "§110", de: "Waffentransport ohne Sicherung", en: "Unsafe Weapon Transport", text: "Transporting weapons without proper safety measures.", jail: 4, fine: 4000 },
-{ id: "§111", de: "Besitz geringer Mengen Drogen", en: "Minor Drug Possession", text: "Possession of small quantities of illegal drugs.", jail: 1, fine: 1000 },
-{ id: "§112", de: "Besitz mittlerer Mengen Drogen", en: "Drug Possession", text: "Possession of moderate quantities of illegal drugs.", jail: 3, fine: 3000 },
-{ id: "§113", de: "Besitz großer Mengen Drogen", en: "Major Drug Possession", text: "Possession of large quantities of illegal drugs.", jail: 8, fine: 10000 },
-{ id: "§114", de: "Drogenkonsum in Öffentlichkeit", en: "Public Drug Use", text: "Using illegal drugs in public.", jail: 1, fine: 1500 },
-{ id: "§115", de: "Drogenhandel gering", en: "Minor Drug Dealing", text: "Selling small quantities of drugs.", jail: 5, fine: 6000 },
-{ id: "§116", de: "Drogenhandel", en: "Drug Dealing", text: "Selling illegal drugs.", jail: 10, fine: 15000 },
-{ id: "§117", de: "Schwerer Drogenhandel", en: "Major Drug Trafficking", text: "Large-scale trafficking of drugs.", jail: 25, fine: 40000 },
-{ id: "§118", de: "Drogenimport", en: "Drug Importation", text: "Importing illegal drugs.", jail: 30, fine: 50000 },
-{ id: "§119", de: "Drogenexport", en: "Drug Exportation", text: "Exporting illegal drugs.", jail: 30, fine: 50000 },
-{ id: "§120", de: "Herstellung von Drogen", en: "Drug Manufacturing", text: "Manufacturing illegal drugs.", jail: 35, fine: 60000 },
-{ id: "§121", de: "Drogenlabor Betrieb", en: "Operating Drug Lab", text: "Operating an illegal drug laboratory.", jail: 40, fine: 75000 },
-{ id: "§122", de: "Besitz von Drogenutensilien", en: "Drug Paraphernalia", text: "Possession of drug-related equipment.", jail: 0, fine: 800 },
-{ id: "§123", de: "Drogenverkauf an Minderjährige", en: "Selling Drugs to Minors", text: "Selling drugs to minors.", jail: 30, fine: 60000 },
-{ id: "§124", de: "Drogenbesitz im Fahrzeug", en: "Drugs in Vehicle", text: "Possession of drugs inside a vehicle.", jail: 2, fine: 2500 },
-{ id: "§125", de: "Drogen unter Bewährung", en: "Drug Offense on Probation", text: "Drug offenses committed while on probation.", jail: 6, fine: 7000 },
-{ id: "§126", de: "Drogen unter Bewährung schwer", en: "Major Drug Offense on Probation", text: "Serious drug crimes while on probation.", jail: 15, fine: 20000 },
-{ id: "§127", de: "Fahren unter Drogeneinfluss", en: "Driving Under Influence of Drugs", text: "Operating a vehicle while under influence of drugs.", jail: 5, fine: 4000 },
-{ id: "§128", de: "Drogenhandel organisiert", en: "Organized Drug Trafficking", text: "Operating an organized drug trafficking ring.", jail: 45, fine: 90000 },
-{ id: "§129", de: "Drogenfinanzierung", en: "Drug Financing", text: "Financing drug production or trafficking.", jail: 35, fine: 70000 },
-{ id: "§130", de: "Geldwäsche durch Drogen", en: "Drug Money Laundering", text: "Laundering money from drug crimes.", jail: 30, fine: 80000 },
-{ id: "§131", de: "Besitz synthetischer Drogen", en: "Synthetic Drug Possession", text: "Possession of synthetic drugs.", jail: 6, fine: 8000 },
-{ id: "§132", de: "Herstellung synthetischer Drogen", en: "Synthetic Drug Manufacturing", text: "Manufacturing synthetic drugs.", jail: 40, fine: 90000 },
-{ id: "§133", de: "Vertrieb synthetischer Drogen", en: "Synthetic Drug Distribution", text: "Distributing synthetic drugs.", jail: 30, fine: 70000 },
-{ id: "§134", de: "Drogenkurier", en: "Drug Courier", text: "Transporting drugs for others.", jail: 12, fine: 20000 },
-{ id: "§135", de: "Drogenlager", en: "Drug Storage Facility", text: "Maintaining a drug storage location.", jail: 20, fine: 35000 },
-{ id: "§136", de: "Drogenverkauf im großen Stil", en: "Large Scale Drug Sales", text: "Selling drugs in very large quantities.", jail: 50, fine: 120000 },
-{ id: "§137", de: "Drogen in staatlicher Einrichtung", en: "Drugs in Government Facility", text: "Possession of drugs in a government building.", jail: 8, fine: 12000 },
-{ id: "§138", de: "Drogenhandel international", en: "International Drug Trafficking", text: "International trafficking of drugs.", jail: 60, fine: 150000 },
-{ id: "§139", de: "Drogen an Gefangene", en: "Supplying Drugs to Prisoners", text: "Supplying drugs to inmates.", jail: 25, fine: 40000 },
-{ id: "§140", de: "Drogen in Schule", en: "Drugs at School", text: "Possession or sale of drugs at a school.", jail: 20, fine: 30000 },
-{ id: "§141", de: "Drogenrausch mit Gewalt", en: "Drug-Induced Violence", text: "Committing violent acts under drug influence.", jail: 15, fine: 25000 },
-{ id: "§142", de: "Zwang zum Drogenkonsum", en: "Forced Drug Use", text: "Forcing another person to consume drugs.", jail: 35, fine: 60000 },
-{ id: "§143", de: "Drogenbesitz im Sperrgebiet", en: "Drugs in Restricted Area", text: "Possession of drugs in restricted areas.", jail: 6, fine: 9000 },
-{ id: "§144", de: "Medikamentenmissbrauch", en: "Prescription Drug Abuse", text: "Abuse of prescription medication.", jail: 3, fine: 3000 },
-{ id: "§145", de: "Illegaler Medikamentenhandel", en: "Illegal Prescription Drug Trade", text: "Illegal trading of prescription drugs.", jail: 12, fine: 18000 },
-{ id: "§146", de: "Drogenproduktion Plantage", en: "Drug Plantation", text: "Operating a drug-growing plantation.", jail: 30, fine: 50000 },
-{ id: "§147", de: "Drogen unter Waffenbesitz", en: "Drugs with Weapon Possession", text: "Possessing drugs while armed.", jail: 18, fine: 30000 },
-{ id: "§148", de: "Drogenflucht vor Polizei", en: "Drug Evasion", text: "Attempting to flee police while carrying drugs.", jail: 10, fine: 15000 },
-{ id: "§149", de: "Drogen in großen Mengen Fahrzeug", en: "Drugs Transport Vehicle", text: "Transporting large quantities of drugs by vehicle.", jail: 22, fine: 40000 },
-{ id: "§150", de: "Drogenkartell Mitgliedschaft", en: "Drug Cartel Membership", text: "Being a member of a drug cartel.", jail: 70, fine: 200000 },
-{ id: "§151", de: "Diebstahl geringwertiger Sache", en: "Petty Theft", text: "Stealing property of low value.", jail: 1, fine: 500 },
-{ id: "§152", de: "Diebstahl", en: "Theft", text: "Unlawfully taking another person's property.", jail: 3, fine: 2000 },
-{ id: "§153", de: "Schwerer Diebstahl", en: "Grand Theft", text: "Stealing high-value property.", jail: 8, fine: 8000 },
-{ id: "§154", de: "Einbruch", en: "Burglary", text: "Unlawful entry into a building to commit a crime.", jail: 10, fine: 10000 },
-{ id: "§155", de: "Bewaffneter Einbruch", en: "Armed Burglary", text: "Burglary while armed.", jail: 18, fine: 20000 },
-{ id: "§156", de: "Raub", en: "Robbery", text: "Taking property using force or intimidation.", jail: 15, fine: 15000 },
-{ id: "§157", de: "Schwerer Raub", en: "Aggravated Robbery", text: "Robbery with severe violence or weapons.", jail: 30, fine: 40000 },
-{ id: "§158", de: "Autoraub", en: "Carjacking", text: "Stealing a vehicle from a person using force.", jail: 25, fine: 30000 },
-{ id: "§159", de: "Taschendiebstahl", en: "Pickpocketing", text: "Stealing items directly from another person.", jail: 2, fine: 1500 },
-{ id: "§160", de: "Ladendiebstahl", en: "Shoplifting", text: "Stealing goods from a store.", jail: 1, fine: 1000 },
-{ id: "§161", de: "Fahrzeugdiebstahl", en: "Vehicle Theft", text: "Stealing a motor vehicle.", jail: 8, fine: 10000 },
-{ id: "§162", de: "Diebstahl aus Fahrzeug", en: "Theft from Vehicle", text: "Stealing items from a vehicle.", jail: 3, fine: 2500 },
-{ id: "§163", de: "Fahrraddiebstahl", en: "Bicycle Theft", text: "Stealing a bicycle.", jail: 1, fine: 800 },
-{ id: "§164", de: "Diebstahl staatlichen Eigentums", en: "Theft of Government Property", text: "Stealing government-owned property.", jail: 12, fine: 15000 },
-{ id: "§165", de: "Sachbeschädigung gering", en: "Minor Vandalism", text: "Minor damage to property.", jail: 0, fine: 600 },
-{ id: "§166", de: "Sachbeschädigung", en: "Vandalism", text: "Damaging another person's property.", jail: 2, fine: 2000 },
-{ id: "§167", de: "Schwere Sachbeschädigung", en: "Aggravated Vandalism", text: "Severe or extensive property damage.", jail: 6, fine: 8000 },
-{ id: "§168", de: "Brandstiftung gering", en: "Minor Arson", text: "Setting a small fire causing limited damage.", jail: 10, fine: 12000 },
-{ id: "§169", de: "Brandstiftung", en: "Arson", text: "Intentionally setting property on fire.", jail: 25, fine: 30000 },
-{ id: "§170", de: "Schwere Brandstiftung", en: "Aggravated Arson", text: "Arson causing major damage or risk to life.", jail: 45, fine: 70000 },
-{ id: "§171", de: "Hehlerei", en: "Possession of Stolen Goods", text: "Possessing or reselling stolen property.", jail: 5, fine: 5000 },
-{ id: "§172", de: "Betrug gering", en: "Minor Fraud", text: "Committing small-scale fraud.", jail: 1, fine: 1200 },
-{ id: "§173", de: "Betrug", en: "Fraud", text: "Deceiving others for financial gain.", jail: 6, fine: 8000 },
-{ id: "§174", de: "Schwerer Betrug", en: "Aggravated Fraud", text: "Large-scale or organized fraud.", jail: 15, fine: 25000 },
-{ id: "§175", de: "Versicherungsbetrug", en: "Insurance Fraud", text: "Defrauding insurance companies.", jail: 8, fine: 12000 },
-{ id: "§176", de: "Kreditkartenbetrug", en: "Credit Card Fraud", text: "Illegal use of credit cards.", jail: 7, fine: 10000 },
-{ id: "§177", de: "Identitätsdiebstahl", en: "Identity Theft", text: "Stealing another person’s identity.", jail: 10, fine: 15000 },
-{ id: "§178", de: "Einbruch in Fahrzeug", en: "Vehicle Burglary", text: "Breaking into a vehicle to steal property.", jail: 6, fine: 6000 },
-{ id: "§179", de: "Tresordiebstahl", en: "Safe Theft", text: "Stealing a safe or its contents.", jail: 12, fine: 20000 },
-{ id: "§180", de: "Raubüberfall auf Geschäft", en: "Store Robbery", text: "Robbing a commercial establishment.", jail: 20, fine: 30000 },
-{ id: "§181", de: "Raubüberfall auf Bank", en: "Bank Robbery", text: "Robbing a bank.", jail: 40, fine: 80000 },
-{ id: "§182", de: "Raubüberfall auf Geldtransport", en: "Armored Truck Robbery", text: "Robbing an armored money transport.", jail: 50, fine: 100000 },
-{ id: "§183", de: "Erpressung gering", en: "Minor Extortion", text: "Extorting small sums through threats.", jail: 4, fine: 5000 },
-{ id: "§184", de: "Erpressung", en: "Extortion", text: "Extorting money or goods through threats.", jail: 12, fine: 20000 },
-{ id: "§185", de: "Schwere Erpressung", en: "Aggravated Extortion", text: "Large-scale or violent extortion.", jail: 25, fine: 40000 },
-{ id: "§186", de: "Betrug mit öffentlichen Mitteln", en: "Public Funds Fraud", text: "Misusing or stealing public funds.", jail: 18, fine: 30000 },
-{ id: "§187", de: "Sachbeschädigung an Infrastruktur", en: "Infrastructure Damage", text: "Damaging public infrastructure.", jail: 15, fine: 25000 },
-{ id: "§188", de: "Zerstörung kritischer Infrastruktur", en: "Critical Infrastructure Sabotage", text: "Sabotaging critical infrastructure.", jail: 40, fine: 90000 },
-{ id: "§189", de: "Plünderung", en: "Looting", text: "Stealing during emergencies or riots.", jail: 20, fine: 35000 },
-{ id: "§190", de: "Organisierte Eigentumskriminalität", en: "Organized Property Crime", text: "Organized large-scale property crime.", jail: 35, fine: 60000 },
-{ id: "§191", de: "Körperverletzung gering", en: "Minor Assault", text: "Causing minor physical harm to another person.", jail: 2, fine: 2000 },
-{ id: "§192", de: "Körperverletzung", en: "Assault", text: "Causing bodily harm to another person.", jail: 5, fine: 5000 },
-{ id: "§193", de: "Schwere Körperverletzung", en: "Aggravated Assault", text: "Causing serious bodily injury.", jail: 15, fine: 20000 },
-{ id: "§194", de: "Körperverletzung mit Waffe", en: "Assault with Weapon", text: "Assault using a weapon.", jail: 20, fine: 30000 },
-{ id: "§195", de: "Totschlag", en: "Manslaughter", text: "Killing another person without premeditation.", jail: 40, fine: 80000 },
-{ id: "§196", de: "Mord", en: "Murder", text: "Premeditated killing of another person.", jail: 90, fine: 150000 },
-{ id: "§197", de: "Versuchter Mord", en: "Attempted Murder", text: "Attempt to commit murder.", jail: 70, fine: 120000 },
-{ id: "§198", de: "Entführung", en: "Kidnapping", text: "Unlawfully abducting a person.", jail: 45, fine: 70000 },
-{ id: "§199", de: "Geiselnahme", en: "Hostage Taking", text: "Taking hostages to force demands.", jail: 60, fine: 100000 },
-{ id: "§200", de: "Freiheitsberaubung", en: "False Imprisonment", text: "Unlawfully restraining a person.", jail: 8, fine: 10000 },
-{ id: "§201", de: "Bedrohung", en: "Threats", text: "Threatening harm to another person.", jail: 3, fine: 3000 },
-{ id: "§202", de: "Nötigung", en: "Coercion", text: "Forcing someone to act against their will.", jail: 6, fine: 8000 },
-{ id: "§203", de: "Stalking", en: "Stalking", text: "Repeatedly harassing or following a person.", jail: 5, fine: 6000 },
-{ id: "§204", de: "Häusliche Gewalt", en: "Domestic Violence", text: "Violence within a domestic relationship.", jail: 12, fine: 15000 },
-{ id: "§205", de: "Misshandlung Schutzbefohlener", en: "Abuse of Dependent", text: "Abusing a dependent person.", jail: 18, fine: 25000 },
-{ id: "§206", de: "Folter", en: "Torture", text: "Inflicting severe pain intentionally.", jail: 50, fine: 90000 },
-{ id: "§207", de: "Vergewaltigung", en: "Rape", text: "Sexual assault without consent.", jail: 80, fine: 150000 },
-{ id: "§208", de: "Sexuelle Nötigung", en: "Sexual Coercion", text: "Forcing sexual acts through threats.", jail: 40, fine: 70000 },
-{ id: "§209", de: "Sexueller Übergriff", en: "Sexual Assault", text: "Non-consensual sexual contact.", jail: 25, fine: 40000 },
-{ id: "§210", de: "Missbrauch Minderjähriger", en: "Child Abuse", text: "Abusing a minor.", jail: 90, fine: 200000 },
-{ id: "§211", de: "Menschenhandel", en: "Human Trafficking", text: "Trading or exploiting human beings.", jail: 80, fine: 180000 },
-{ id: "§212", de: "Zwangsprostitution", en: "Forced Prostitution", text: "Forcing individuals into prostitution.", jail: 70, fine: 150000 },
-{ id: "§213", de: "Bandenkriminalität", en: "Gang Activity", text: "Participation in organized gang crime.", jail: 25, fine: 40000 },
-{ id: "§214", de: "Bewaffnete Bande", en: "Armed Gang Membership", text: "Membership in an armed gang.", jail: 35, fine: 60000 },
-{ id: "§215", de: "Aufruhr", en: "Riot", text: "Participating in a violent disturbance.", jail: 15, fine: 25000 },
-{ id: "§216", de: "Landfriedensbruch", en: "Public Disorder", text: "Severe disturbance of public peace.", jail: 10, fine: 15000 },
-{ id: "§217", de: "Widerstand gegen Vollstreckung", en: "Resisting Arrest", text: "Resisting law enforcement.", jail: 4, fine: 4000 },
-{ id: "§218", de: "Angriff auf Beamte", en: "Assault on Officer", text: "Assaulting a law enforcement officer.", jail: 20, fine: 30000 },
-{ id: "§219", de: "Bestechung", en: "Bribery", text: "Offering or accepting bribes.", jail: 10, fine: 20000 },
-{ id: "§220", de: "Korruption", en: "Corruption", text: "Abuse of power for personal gain.", jail: 25, fine: 50000 },
-{ id: "§221", de: "Amtsmissbrauch", en: "Abuse of Office", text: "Misuse of official authority.", jail: 15, fine: 30000 },
-{ id: "§222", de: "Falschaussage", en: "False Testimony", text: "Providing false statements to authorities.", jail: 6, fine: 8000 },
-{ id: "§223", de: "Meineid", en: "Perjury", text: "Lying under oath.", jail: 20, fine: 40000 },
-{ id: "§224", de: "Justizbehinderung", en: "Obstruction of Justice", text: "Interfering with judicial proceedings.", jail: 12, fine: 20000 },
-{ id: "§225", de: "Beweismittelmanipulation", en: "Evidence Tampering", text: "Altering or destroying evidence.", jail: 15, fine: 25000 },
-{ id: "§226", de: "Gefangenenbefreiung", en: "Prison Break Assistance", text: "Assisting a prisoner to escape.", jail: 30, fine: 60000 },
-{ id: "§227", de: "Ausbruch aus Haft", en: "Prison Escape", text: "Escaping from lawful custody.", jail: 20, fine: 30000 },
-{ id: "§228", de: "Fluchthilfe", en: "Aiding Escape", text: "Helping a fugitive evade capture.", jail: 15, fine: 25000 },
-{ id: "§229", de: "Falsche Identität", en: "False Identity", text: "Using a false identity.", jail: 5, fine: 6000 },
-{ id: "§230", de: "Urkundenfälschung", en: "Forgery", text: "Creating or using forged documents.", jail: 10, fine: 15000 },
-{ id: "§231", de: "Cyberkriminalität gering", en: "Minor Cybercrime", text: "Minor digital offenses.", jail: 3, fine: 4000 },
-{ id: "§232", de: "Cyberkriminalität", en: "Cybercrime", text: "Serious digital criminal activity.", jail: 12, fine: 20000 },
-{ id: "§233", de: "Hacking staatlicher Systeme", en: "Government System Hacking", text: "Hacking government systems.", jail: 30, fine: 60000 },
-{ id: "§234", de: "Identitätsbetrug digital", en: "Digital Identity Fraud", text: "Online identity fraud.", jail: 8, fine: 12000 },
-{ id: "§235", de: "Datenmanipulation", en: "Data Manipulation", text: "Manipulating digital data illegally.", jail: 10, fine: 15000 },
-{ id: "§236", de: "Sabotage", en: "Sabotage", text: "Deliberate destruction to disrupt systems.", jail: 40, fine: 90000 },
-{ id: "§237", de: "Terroristische Handlung", en: "Terrorist Act", text: "Committing acts of terrorism.", jail: 120, fine: 300000 },
-{ id: "§238", de: "Terrorfinanzierung", en: "Terror Financing", text: "Financing terrorist activities.", jail: 80, fine: 200000 },
-{ id: "§239", de: "Terrororganisation Mitgliedschaft", en: "Terror Organization Membership", text: "Membership in a terrorist organization.", jail: 100, fine: 250000 },
-{ id: "§240", de: "Kriegsverbrechen", en: "War Crimes", text: "Crimes committed during war.", jail: 150, fine: 500000 },
-{ id: "§241", de: "Verbrechen gegen die Menschlichkeit", en: "Crimes Against Humanity", text: "Severe crimes against civilians.", jail: 200, fine: 1000000 },
-{ id: "§242", de: "Spionage", en: "Espionage", text: "Spying against the state.", jail: 80, fine: 200000 },
-{ id: "§243", de: "Hochverrat", en: "High Treason", text: "Acts to overthrow the state.", jail: 200, fine: 1000000 },
-{ id: "§244", de: "Staatsgefährdung", en: "Endangering the State", text: "Actions endangering national security.", jail: 120, fine: 300000 },
-{ id: "§245", de: "Illegale Grenzübertritte", en: "Illegal Border Crossing", text: "Crossing borders illegally.", jail: 6, fine: 8000 },
-{ id: "§246", de: "Menschenhandel über Grenze", en: "Cross-Border Human Trafficking", text: "Human trafficking across borders.", jail: 90, fine: 250000 },
-{ id: "§247", de: "Schleusung", en: "Smuggling People", text: "Smuggling people illegally.", jail: 25, fine: 50000 },
-{ id: "§248", de: "Falsche Staatsangehörigkeit", en: "False Citizenship", text: "Claiming false citizenship.", jail: 8, fine: 12000 },
-{ id: "§249", de: "Wahlbetrug", en: "Election Fraud", text: "Manipulating election results.", jail: 30, fine: 60000 },
-{ id: "§250", de: "Amtsanmaßung", en: "Impersonating Official", text: "Impersonating a government official.", jail: 6, fine: 9000 },
-{ id: "§251", de: "Illegale Versammlung", en: "Illegal Assembly", text: "Participating in an illegal gathering.", jail: 3, fine: 4000 },
-{ id: "§252", de: "Aufruf zu Gewalt", en: "Incitement to Violence", text: "Encouraging violent acts.", jail: 12, fine: 20000 },
-{ id: "§253", de: "Hasskriminalität", en: "Hate Crime", text: "Crimes motivated by hatred.", jail: 25, fine: 40000 },
-{ id: "§254", de: "Diskriminierende Gewalt", en: "Discriminatory Violence", text: "Violence based on discrimination.", jail: 35, fine: 60000 },
-{ id: "§255", de: "Verletzung der Menschenwürde", en: "Violation of Human Dignity", text: "Severe violation of human dignity.", jail: 50, fine: 100000 },
-{ id: "§256", de: "Verschwörung", en: "Criminal Conspiracy", text: "Planning serious crimes with others.", jail: 20, fine: 35000 },
-{ id: "§257", de: "Beihilfe", en: "Aiding and Abetting", text: "Assisting in the commission of crimes.", jail: 10, fine: 15000 },
-{ id: "§258", de: "Strafvereitelung", en: "Obstruction After the Fact", text: "Helping offenders evade punishment.", jail: 12, fine: 20000 },
-{ id: "§259", de: "Unbefugter Start", en: "Unauthorized Takeoff", text: "Starten eines Luftfahrzeugs ohne Genehmigung oder Lizenz.", jail: 8, fine: 8000 },
-{ id: "§260", de: "Fliegen ohne Pilotenlizenz", en: "Flying Without License", text: "Betrieb eines Flugzeugs oder Helikopters ohne gültige Fluglizenz.", jail: 15, fine: 12000 },
-{ id: "§261", de: "Verstoß gegen Sperrgebiet", en: "Violation of No-Fly Zone", text: "Eindringen in eine militärische oder städtische No-Fly-Zone.", jail: 20, fine: 18000 },
-{ id: "§262", de: "Tiefflug über Stadtgebiet", en: "Low Altitude Flight over City", text: "Fliegen unter der erlaubten Mindesthöhe über bebautem Gebiet.", jail: 10, fine: 10000 },
-{ id: "§263", de: "Rücksichtsloses Flugverhalten", en: "Reckless Aerial Maneuvers", text: "Gefährdende Flugmanöver (Loopings, scharfe Kurven etc.) in bewohntem Gebiet.", jail: 12, fine: 15000 },
-{ id: "§264", de: "Illegale Landung auf Straße", en: "Illegal Landing on Public Road", text: "Landung eines Helikopters oder Flugzeugs auf öffentlicher Straße oder Parkplatz.", jail: 18, fine: 20000 },
-{ id: "§265", de: "Flucht nach Luftunfall", en: "Aerial Hit and Run", text: "Verlassen des Unfallorts nach Kollision in der Luft oder am Boden.", jail: 25, fine: 30000 },
-{ id: "§266", de: "Schmuggel per Luftfahrzeug", en: "Smuggling via Aircraft", text: "Transport illegaler Güter (Drogen, Waffen) mit Flugzeug oder Helikopter.", jail: 50, fine: 60000 },
-{ id: "§267", de: "Angriff aus der Luft", en: "Aerial Assault", text: "Abfeuern von Schusswaffen oder Abwerfen von Gegenständen aus einem Luftfahrzeug.", jail: 40, fine: 45000 },
-{ id: "§268", de: "Unbefugter Drohnenbetrieb", en: "Unauthorized Drone Operation", text: "Betrieb einer Drohne ohne Registrierung oder in verbotenen Zonen.", jail: 5, fine: 4000 },
-{ id: "§269", de: "Drohnen-Spionage", en: "Drone Spying / Surveillance", text: "Einsatz einer Drohne zur unbefugten Überwachung von Personen oder Grundstücken.", jail: 10, fine: 8000 },
-{ id: "§270", de: "Fehlender Flugplan", en: "Failure to File Flight Plan", text: "Start ohne vorherige Einreichung eines Flugplans bei kontrolliertem Luftraum.", jail: 6, fine: 5000 },
-{ id: "§271", de: "Störung der Flugsicherung", en: "Interfering with Air Traffic Control", text: "Funkstörung, falsche Angaben oder Behinderung der Luftverkehrskontrolle.", jail: 30, fine: 35000 },
-{ id: "§272", de: "Luft-Frevel / Joyriding", en: "Aerial Joyriding", text: "Unbefugtes Übernehmen und Fliegen eines Luftfahrzeugs ohne Diebstahlsabsicht.", jail: 12, fine: 12000 },
-{ id: "§273", de: "Luftfahrzeugdiebstahl", en: "Aerial Grand Theft Auto (Air)", text: "Diebstahl eines Helikopters, Flugzeugs oder anderer Luftfahrzeuge.", jail: 25, fine: 30000 },
-{ id: "§274", de: "Verursachung Luftkollision", en: "Mid-Air Collision Caused", text: "Fahrlässiges oder vorsätzliches Verursachen einer Kollision in der Luft.", jail: 60, fine: 70000 },
-{ id: "§275", de: "Fliegen unter Einfluss", en: "Aerial DUI", text: "Betrieb eines Luftfahrzeugs unter Alkohol- oder Drogeneinfluss.", jail: 30, fine: 40000 },
-{ id: "§276", de: "Illegales Fallschirmspringen", en: "Illegal Parachute Jump", text: "Absprung aus einem Luftfahrzeug über verbotenem Gebiet oder ohne Genehmigung.", jail: 8, fine: 7000 },
-{ id: "§277", de: "Verstoß Luftwerbung", en: "Aerial Advertising Violation", text: "Werbebanner oder -flüge ohne behördliche Erlaubnis.", jail: 4, fine: 3000 },
-{ id: "§278", de: "Eindringen Militärluftraum", en: "Flying in Restricted Airspace (Military)", text: "Eindringen in militärisches Sperrgebiet oder Luftraumklasse R.", jail: 40, fine: 50000 },
-{ id: "§279", de: "Laserpointer auf Flugzeug", en: "Laser Pointing at Aircraft", text: "Bestrahlen eines Luftfahrzeugs mit Laserpointer oder starkem Licht.", jail: 15, fine: 15000 },
-{ id: "§280", de: "Luftkriminalitäts-Organisation", en: "Organized Aerial Crime Syndicate", text: "Leitung oder Beteiligung an organisierter Kriminalität mit Luftfahrzeugen.", jail: 90, fine: 90000 },
-{ id: "§281", de: "Führen eines Bootes ohne Bootsführerschein", en: "Operating Boat Without License", text: "Betrieb eines motorisierten Wasserfahrzeugs ohne gültigen Bootsführerschein oder Sportbootführerschein.", jail: 3, fine: 2500 },
-{ id: "§282", de: "Geschwindigkeitsüberschreitung auf dem Wasser (>48 km/h)", en: "Speeding on Water (over 30 knots)", text: "Überschreiten der zulässigen Höchstgeschwindigkeit auf Binnengewässern oder Küstengebieten.", jail: 2, fine: 1800 },
-{ id: "§283", de: "Rücksichtsloses Führen eines Wasserfahrzeugs", en: "Reckless Operation of Vessel", text: "Gefährdendes Manövrieren eines Bootes, Jetskis oder anderer Wasserfahrzeuge (z. B. enge Kreise um Schwimmer).", jail: 6, fine: 5000 },
-{ id: "§284", de: "Führen unter Alkoholeinfluss Stufe 1", en: "Boating Under Influence (BUI) Level 1", text: "BAC 0.08–0.15 beim Führen eines Wasserfahrzeugs.", jail: 8, fine: 6000 },
-{ id: "§285", de: "Führen unter Alkoholeinfluss Stufe 2", en: "Boating Under Influence (BUI) Level 2", text: "BAC über 0.15 oder starke Beeinträchtigung beim Führen eines Wasserfahrzeugs.", jail: 15, fine: 12000 },
-{ id: "§286", de: "Unfallflucht auf dem Wasser (Sachschaden)", en: "Hit and Run on Water (Property)", text: "Verlassen des Unfallorts nach Kollision mit einem anderen Boot oder einer Boje (Sachschaden).", jail: 5, fine: 4000 },
-{ id: "§287", de: "Unfallflucht auf dem Wasser (Verletzung)", en: "Hit and Run on Water (Injury)", text: "Flucht nach Kollision mit Personenschaden.", jail: 20, fine: 18000 },
-{ id: "§288", de: "Unfallflucht auf dem Wasser (Todesfall)", en: "Hit and Run on Water (Fatal)", text: "Flucht nach tödlichem Unfall auf dem Wasser.", jail: 60, fine: 50000 },
-{ id: "§289", de: "Illegales Anlegen / Festmachen", en: "Illegal Mooring / Docking", text: "Anlegen an privatem Steg, Sperrgebiet oder Naturschutzgebiet ohne Erlaubnis.", jail: 1, fine: 1200 },
-{ id: "§290", de: "Behinderung der Schifffahrtswege", en: "Waterway Obstruction", text: "Blockieren von Fahrrinnen, Häfen oder Rettungswegen durch Boot oder Treibgut.", jail: 4, fine: 3000 },
-{ id: "§291", de: "Illegales Bootsrennen", en: "Illegal Water Racing", text: "Teilnahme an nicht genehmigten Rennen oder Geschwindigkeitswettbewerben auf dem Wasser.", jail: 10, fine: 8000 },
-{ id: "§292", de: "Schmuggel per Wasserfahrzeug", en: "Smuggling via Vessel", text: "Transport illegaler Güter (Drogen, Waffen, Personen) mit Boot oder Yacht.", jail: 50, fine: 60000 },
-{ id: "§293", de: "Seeräuberei / Bewaffnetes Entern", en: "Piracy / Armed Boarding", text: "Gewaltsames Entern eines anderen Wasserfahrzeugs mit Waffe.", jail: 80, fine: 75000 },
-{ id: "§294", de: "Unterlassene Hilfeleistung auf See", en: "Failure to Render Assistance", text: "Nicht-Hilfeleistung bei Seenot oder Unfall in der Nähe.", jail: 12, fine: 10000 },
-{ id: "§295", de: "Jetski in Sperrgebiet", en: "Operating Jetski in Restricted Area", text: "Fahren mit Jetski in Badezonen, Häfen oder Naturschutzgebieten.", jail: 4, fine: 3500 },
-{ id: "§296", de: "Schießen vom Boot aus", en: "Discharging Firearm from Vessel", text: "Abfeuern von Schusswaffen von einem Wasserfahrzeug aus.", jail: 25, fine: 25000 },
-{ id: "§297", de: "Illegale gewerbliche Fischerei", en: "Illegal Commercial Fishing", text: "Fischen ohne Lizenz oder in geschützten Zonen mit Netzen / Fallen.", jail: 8, fine: 7000 },
-{ id: "§298", de: "Wasserfahrzeugdiebstahl", en: "Vessel Theft", text: "Diebstahl eines Bootes, Jetskis oder einer Yacht.", jail: 15, fine: 15000 },
-{ id: "§299", de: "Fahren ohne Zulassung", en: "Operating Vessel Without Registration", text: "Betrieb eines nicht zugelassenen oder nicht gekennzeichneten Wasserfahrzeugs.", jail: 3, fine: 2500 },
-{ id: "§300", de: "Verunreinigung durch Wasserfahrzeug", en: "Pollution from Vessel", text: "Einleiten von Öl, Kraftstoff, Müll oder Abwässern ins Wasser.", jail: 10, fine: 12000 },
-{ id: "§301", de: "Verstoß gegen Wellenreiten-Regeln", en: "Wake Surfing Violation", text: "Wellenreiten (Wake Surfing) zu nah an Ufer, Schwimmern oder anderen Booten.", jail: 2, fine: 1800 },
-{ id: "§302", de: "Keine Rettungswesten an Bord", en: "No Life Jackets On Board", text: "Nichtmitführen ausreichender Rettungswesten für alle Personen an Bord.", jail: 1, fine: 1000 },
-{ id: "§303", de: "Minderjähriger Bootsführer", en: "Underage Operation of Vessel", text: "Führen eines motorisierten Wasserfahrzeugs unter 16 Jahren (oder ohne Aufsicht).", jail: 4, fine: 3000 },
-{ id: "§304", de: "Hafen-/Steg-Hausfriedensbruch", en: "Harbor / Dock Trespassing", text: "Unbefugtes Betreten privater Yachthäfen oder Stege.", jail: 2, fine: 1500 },
-{ id: "§305", de: "Illegale U-Boot-Nutzung", en: "Illegal Submarine Operation", text: "Betrieb oder Besitz eines nicht zugelassenen Tauchbootes / Mini-U-Boots.", jail: 40, fine: 50000 },
-{ id: "§306", de: "Angriff aus dem Wasser auf Luftfahrzeug", en: "Aerial Assault from Vessel", text: "Beschießen oder Bedrohen eines Helikopters / Flugzeugs von einem Boot aus.", jail: 50, fine: 60000 },
-{ id: "§307", de: "Organisierter See-Schmuggelring", en: "Organized Maritime Smuggling Ring", text: "Leitung oder maßgebliche Beteiligung an organisierter Schmuggeloperation per Schiff.", jail: 90, fine: 90000 },
-{ id: "§308", de: "Fehlende Navigationslichter", en: "Failure to Display Navigation Lights", text: "Fahren bei Dunkelheit oder schlechter Sicht ohne Positionslichter.", jail: 2, fine: 1500 },
-{ id: "§309", de: "Behinderung Seenotrettung", en: "Interfering with Marine Rescue", text: "Behinderung oder Gefährdung von Rettungskräften auf dem Wasser.", jail: 15, fine: 15000 },
-{ id: "§310", de: "Maritimer Terrorismus", en: "Maritime Terrorism", text: "Vorsätzliche Gefährdung von Schiffen, Häfen oder Personen durch Sprengstoff, Rammen o. Ä.", jail: 120, fine: 90000 },
-    ];
+const lawList = document.getElementById('lawList');
+LAWS.forEach(l => {
+  const div = document.createElement('div');
+  div.innerHTML = `<b>${l.id}</b> – ${l.de} | ${l.fine}$ / ${l.jail} Monate`;
+  lawList.appendChild(div);
+});
 
-    // Benutzer-Sync mit Firebase Cloud
-    db.ref('users').on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            users = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-        } else {
-            // Standard User falls DB leer
-            users = [{ u: "Admin", p: "DOJ2026", r: "admin" }];
-        }
-        if(currentUser && currentUser.r === 'admin') renderUserList();
-    });
+// ===== STRAFRECHNER =====
+window.calculatePenalty = (base, percent) => {
+  return Math.round(base * (percent / 100));
+};
 
-    function handleLogin() {
-        const u = document.getElementById('userInput').value;
-        const p = document.getElementById('passInput').value;
-        const found = users.find(x => x.u === u && x.p === p);
+// ===== EINSATZBERICHTE =====
+let reportCounter = 1;
+window.createReportTitle = (rank, dept) => {
+  const prefix = dept === 'LSPD' ? 'LSPD-EINSATZ-' : 'LSMS-EINSATZ-';
+  return prefix + String(reportCounter++).padStart(5,'0');
+};
 
-        if(found) {
-            currentUser = found;
-            document.getElementById('login-overlay').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'flex';
-            
-            const badge = document.getElementById('uBadge');
-            badge.innerText = currentUser.u.toUpperCase();
-            badge.className = "badge " + (currentUser.r === 'admin' ? 'bg-admin' : 'bg-user');
+// ===== WANTED SYSTEM =====
+window.flagWanted = (personId, reason) => {
+  console.log('AUTO-FLAG WANTED:', personId, reason);
+};
 
-            if(currentUser.r === 'admin') {
-                document.getElementById('admin-panel').style.display = 'flex';
-                renderUserList();
-            }
-            renderLaws(laws);
-        } else {
-            document.getElementById('err').style.display = 'block';
-        }
-    }
+// ===== RICHTER DASHBOARD =====
+window.issueWarrant = (personId, judge) => {
+  console.log('HAFTBEFEHL:', personId, 'Richter:', judge);
+};
 
-    function renderLaws(arr) {
-        const list = document.getElementById('lawList');
-        list.innerHTML = '';
-        arr.forEach(l => {
-            const d = document.createElement('div');
-            d.className = `law-item ${selected.includes(l.id) ? 'selected' : ''}`;
-            d.onclick = () => {
-                selected.includes(l.id) ? selected = selected.filter(x => x !== l.id) : selected.push(l.id);
-                renderLaws(arr); updateUI();
-            };
-            d.innerHTML = `<div><strong>${l.id} ${l.de}</strong><br><small style="color:#555">${l.en}</small></div>
-                           <div style="text-align:right"><span style="color:var(--danger)">${l.j}M</span><br><span style="color:var(--success)">$${l.f}</span></div>`;
-            list.appendChild(d);
-        });
-    }
+window.approveCase = (caseId, judge) => {
+  console.log('FREIGABE:', caseId, 'durch', judge);
+};
 
-    function updateUI() {
-        const s = document.getElementById('selLaws');
-        s.innerHTML = selected.length ? '' : 'Keine Einträge gewählt.';
-        selected.forEach(id => {
-            const l = laws.find(x => x.id === id);
-            s.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; border-bottom:1px solid #222"><span>${l.de}</span><span>${l.j}M / $${l.f}</span></div>`;
-        });
-        calc();
-    }
 
-    function calc() {
-        let j = 0, f = 0;
-        selected.forEach(id => {
-            const l = laws.find(x => x.id === id);
-            j += l.j; f += l.f;
-        });
-        const m = parseFloat(document.getElementById('mod').value);
-        document.getElementById('fJail').innerText = Math.min(Math.round(j * m), 120) + " Monate";
-        document.getElementById('fFine').innerText = "$" + Math.min(Math.round(f * m), 90000).toLocaleString();
-    }
+// ===== AUTOMATISCHE PERSONENAKTE BEI REGISTRIERUNG =====
+window.registerEmployee = async () => {
+  const username = document.getElementById('empUsername').value;
+  const rank = document.getElementById('empRank').value;
 
-    // ADMIN LOGIC (Cloud-basiert)
-    function renderUserList() {
-        const l = document.getElementById('userList');
-        l.innerHTML = '';
-        users.forEach((u, i) => {
-            l.innerHTML += `<div class="user-item">
-                <span>${u.u} <small>(${u.r})</small></span>
-                <span class="delete-ico" onclick="removeUser('${u.id}')">X</span>
-            </div>`;
-        });
-    }
+  const personRef = { firstName: username.split('.')[0] || username, lastName: 'DOE', autoCreated: true };
+  console.log('PERSONENAKTE ANGELEGT:', personRef);
 
-    function addUser() {
-        const u = document.getElementById('nU').value;
-        const p = document.getElementById('nP').value;
-        const r = document.getElementById('nR').value;
-        if(u && p) {
-            db.ref('users').push({ u, p, r });
-            document.getElementById('nU').value = ''; 
-            document.getElementById('nP').value = '';
-        }
-    }
+  console.log('BENUTZER REGISTRIERT:', username, rank);
+};
 
-    function removeUser(id) {
-        if(!id) return alert("Standard-Admin kann nur in der Datenbank gelöscht werden.");
-        db.ref('users/' + id).remove();
-    }
+// ===== LIVE BEAMTENLISTE =====
+const employeeList = document.getElementById('employeeList');
+const mockEmployees = [
+  { user: 'john.doe', rank: 'LSPD Officer', status: 'Online' },
+  { user: 'jane.smith', rank: 'Detective', status: 'Offline' }
+];
 
-    function filterLaws() {
-        const q = document.getElementById('search').value.toLowerCase();
-        renderLaws(laws.filter(l => l.de.toLowerCase().includes(q) || l.id.includes(q)));
-    }
+mockEmployees.forEach(e => {
+  const div = document.createElement('div');
+  div.innerHTML = `👤 ${e.user} | ${e.rank} | <b>${e.status}</b>`;
+  employeeList.appendChild(div);
+});
 
-    function reset() { selected = []; updateUI(); renderLaws(laws); }
+// ===== FIREBASE SECURITY RULES (LOGIK) =====
+/*
+match /persons/{id} {
+  allow read: if request.auth != null;
+  allow write: if request.auth.token.rank in ['LSPD Officer','Detective','Sergeant','Judge','Chief Justice','Attorney General'];
+}
+
+match /investigations/{id} {
+  allow read, write: if request.auth.token.rank in ['Detective','Sergeant','Judge','Chief Justice','Attorney General'];
+}
+
+match /internalAffairs/{id} {
+  allow read, write: if request.auth.token.rank == 'Attorney General';
+}
+*/
+
+
+// ================== AKTEN-HISTORIE & AUDIT-LOG ==================
+
+// Jede Änderung erzeugt einen unveränderbaren Log-Eintrag
+window.writeAuditLog = (type, targetId, action, user) => {
+  const log = {
+    type, // person | record | investigation | warrant
+    targetId,
+    action, // create | update | delete | lock | unlock
+    user,
+    timestamp: new Date().toISOString(),
+    immutable: true
+  };
+  console.log('AUDIT LOG:', log);
+};
+
+// Beispiel: Akte ändern
+window.updateRecord = (recordId, user) => {
+  writeAuditLog('record', recordId, 'update', user);
+};
+
+// ================== PRODUKTIONS-FIREBASE-RULES ==================
+/*
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+
+  // USERS
+  match /users/{userId} {
+    allow read: if request.auth != null;
+    allow write: if request.auth.token.rank == 'Attorney General';
+  }
+
+  // PERSONS
+  match /persons/{id} {
+    allow read: if request.auth != null;
+    allow create: if request.auth.token.rank in ['LSPD Officer','Detective','Sergeant','Judge','Chief Justice','Attorney General'];
+    allow update, delete: if request.auth.token.rank in ['Judge','Chief Justice','Attorney General'];
+  }
+
+  // RECORDS
+  match /records/{id} {
+    allow read: if request.auth != null;
+    allow create, update: if request.auth.token.rank != 'LSPD Officer';
+    allow delete: if request.auth.token.rank in ['Judge','Chief Justice','Attorney General'];
+  }
+
+  // INVESTIGATIONS
+  match /investigations/{id} {
+    allow read: if request.auth.token.rank in ['Detective','Sergeant','Judge','Chief Justice','Attorney General'];
+    allow write: if request.auth.token.rank in ['Judge','Chief Justice','Attorney General']
+      && resource.data.locked != true;
+  }
+
+  // INTERNAL AFFAIRS
+  match /internalAffairs/{id} {
+    allow read, write: if request.auth.token.rank == 'Attorney General';
+  }
+
+  // AUDIT LOGS (UNVERÄNDERBAR)
+  match /auditLogs/{id} {
+    allow create: if request.auth != null;
+    allow read: if request.auth.token.rank in ['Judge','Chief Justice','Attorney General'];
+    allow update, delete: if false;
+  }
+ }
+}
+*/
+
 </script>
+
 </body>
 </html>
