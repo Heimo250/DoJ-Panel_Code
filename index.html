@@ -503,7 +503,19 @@ window.flagWanted = (personId, reason) => {
   </select>
   <button id="toggleCaseBtn">Ausführen</button>
 </section>
+<section id="wanted" class="hidden">
+  <h3>🚨 Live-Fahndung</h3>
+  <select id="wantedPerson"></select>
+  <textarea id="wantedReason" placeholder="Grund für Fahndung"></textarea>
+  <button id="flagWantedBtn">Fahndung auslösen</button>
 
+  <hr />
+  <h4>🔔 Auto-Alerts</h4>
+  <select id="vehicleSelect"></select>
+  <button id="checkPlateBtn">Check</button>
+
+  <div id="alertBox"></div>
+</section>
 
 // ===== AUTOMATISCHE PERSONENAKTE BEI REGISTRIERUNG =====
 window.registerEmployee = async () => {
