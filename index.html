@@ -5,30 +5,25 @@
   <title>MDT – DoJ & LSPD</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-:root {
-  --bg:#05070f;
-  --surface:#0b1220;
-  --panel:#111827;
-  --glass:rgba(17,25,40,.75);
-  --accent:#4f46e5;
-  --accent-2:#22d3ee;
-  --danger:#ef4444;
-  --success:#22c55e;
-  --judge:#facc15;
-  --lspd:#3b82f6;
-  --marshal:#22c55e;
-  --doj:#a855f7;
-  --text:#e5e7eb;
-  --muted:#94a3b8;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
-  background:radial-gradient(1200px 600px at 10% -20%,#1e293b,transparent),
-             radial-gradient(800px 400px at 90% 10%,#020617,transparent),
-             var(--bg);
-  color:var(--text);
+    /* Dein CSS unverändert */
+    :root {
+      --bg:#05070f;
+      --surface:#0b1220;
+      --panel:#111827;
+      --glass:rgba(17,25,40,.75);
+      --accent:#4f46e5;
+      --accent-2:#22d3ee;
+      --danger:#ef4444;
+      --success:#22c55e;
+      --judge:#facc15;
+      --lspd:#3b82f6;
+      --marshal:#22c55e;
+      --doj:#a855f7;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+    }
+    *{box-sizing:border-box}
+    body{ margin:0; font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif; background:radial-gradient(1200px 600px at 10% -20%,#1e293b,transparent),radial-gradient(800px 400px at 90% 10%,#020617,transparent),var(--bg); color:var(--text);
 }
 .tablet{
   max-width:1900px;
@@ -146,28 +141,28 @@ button.action{
 <body>
 <div class="tablet split">
 
-<header>
-  <h2>📱 MDT System</h2>
-  <div id="userInfo"></div>
-</header>
+ <header>
+    <h2>📱 MDT System</h2>
+    <div id="userInfo"></div>
+  </header>
 
-<section id="login">
-  <h3>Login</h3>
-  <input id="username" placeholder="Benutzername" />
-  <input id="password" type="password" placeholder="Passwort" />
-  <button onclick="login()">Einloggen</button>
-</section>
+  <section id="login">
+    <h3>Login</h3>
+    <input id="username" placeholder="Benutzername" />
+    <input id="password" type="password" placeholder="Passwort" />
+    <button onclick="login()">Einloggen</button>
+  </section>
 
-<nav id="mainNav" class="hidden">
-  <button onclick="show('dashboard')">Startseite</button>
-  <button onclick="show('employees')">Employees</button>
-  <button onclick="show('laws')">Panel Code</button>
-  <button onclick="show('reports')">Einsatzberichte</button>
-  <button onclick="show('persons')">Personenregister</button>
-  <button onclick="show('vehicles')">Fahrzeuge</button>
-  <button onclick="show('wanted')">🚨 Wanted</button>
-  <button onclick="show('judge')">⚖️ Richter</button>
-</nav>
+  <nav id="mainNav" class="hidden">
+    <button onclick="show('dashboard')">Startseite</button>
+    <button onclick="show('employees')">Employees</button>
+    <button onclick="show('laws')">Panel Code</button>
+    <button onclick="show('reports')">Einsatzberichte</button>
+    <button onclick="show('persons')">Personenregister</button>
+    <button onclick="show('vehicles')">Fahrzeuge</button>
+    <button onclick="show('wanted')">🚨 Wanted</button>
+    <button onclick="show('judge')">⚖️ Richter</button>
+  </nav>
 
 <section id="dashboard" class="hidden">
   <h3>Startseite</h3>
@@ -288,17 +283,16 @@ const firebaseConfig = {
   const db = firebase.firestore();
 </script>
   
-window.login = async () => {
-  // Custom Username Login via Firestore (kein Firebase Auth)
-  document.getElementById('login').classList.add('hidden');
-  document.getElementById('mainNav').classList.remove('hidden');
-  show('dashboard');
-}
+ window.login = async () => {
+    document.getElementById('login').classList.add('hidden');
+    document.getElementById('mainNav').classList.remove('hidden');
+    show('dashboard');
+  }
 
-window.show = (id) => {
-  document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-}
+  window.show = (id) => {
+    document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+  }
 
 // ===== ROLLEN & PERMISSIONS =====
 const RANKS = {
@@ -311,16 +305,16 @@ const RANKS = {
 
 // ===== LAWS JSON =====
 const LAWS = [
-  { id: '§1', de: 'Geschwindigkeitsüberschreitung (16 km/h über)', en: 'Speeding (10 mph over)', fine: 500, jail: 0 },
-  { id: '§2', de: 'Fahren ohne Lizenz', en: 'Driving without license', fine: 1500, jail: 5 }
-];
-
-const lawList = document.getElementById('lawList');
-LAWS.forEach(l => {
-  const div = document.createElement('div');
-  div.innerHTML = `<b>${l.id}</b> – ${l.de} | ${l.fine}$ / ${l.jail} Monate`;
-  lawList.appendChild(div);
-});
+    { id: '§1', de: 'Geschwindigkeitsüberschreitung (16 km/h über)', en: 'Speeding (10 mph over)', fine: 500, jail: 0 },
+    { id: '§2', de: 'Fahren ohne Lizenz', en: 'Driving without license', fine: 1500, jail: 5 }
+  ];
+  
+ const lawList = document.getElementById('lawList');
+  LAWS.forEach(l => {
+    const div = document.createElement('div');
+    div.innerHTML = `<b>${l.id}</b> – ${l.de} | ${l.fine}$ / ${l.jail} Monate`;
+    lawList.appendChild(div);
+  });
 
 // ===== STRAFRECHNER =====
 window.calculatePenalty = (base, percent) => {
