@@ -485,13 +485,24 @@ window.flagWanted = (personId, reason) => {
 };
 
 // ===== RICHTER DASHBOARD =====
-window.issueWarrant = (personId, judge) => {
-  console.log('HAFTBEFEHL:', personId, 'Richter:', judge);
-};
+<section id="judge" class="hidden">
+  <h3>⚖️ Richter-Dashboard</h3>
 
-window.approveCase = (caseId, judge) => {
-  console.log('FREIGABE:', caseId, 'durch', judge);
-};
+  <h4>Haftbefehl</h4>
+  <select id="judgePerson"></select>
+  <textarea id="judgeReason" placeholder="Begründung"></textarea>
+  <button id="issueWarrantBtn">Haftbefehl ausstellen</button>
+
+  <hr />
+
+  <h4>Ermittlung sperren / freigeben</h4>
+  <select id="caseId"></select>
+  <select id="caseAction">
+    <option value="lock">Sperren</option>
+    <option value="unlock">Freigeben</option>
+  </select>
+  <button id="toggleCaseBtn">Ausführen</button>
+</section>
 
 
 // ===== AUTOMATISCHE PERSONENAKTE BEI REGISTRIERUNG =====
