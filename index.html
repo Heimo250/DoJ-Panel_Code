@@ -263,34 +263,187 @@ button.action{
 </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, doc, addDoc, setDoc, getDocs, Timestamp, updateDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCNYAjMBgtIh64g-siP9CytOZfyRKx-BSg",
-    authDomain: "mdt-los-santos-horizon.firebaseapp.com",
-    databaseURL: "https://mdt-los-santos-horizon-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "mdt-los-santos-horizon",
-    storageBucket: "mdt-los-santos-horizon.firebasestorage.app",
-    messagingSenderId: "611944178614",
-    appId: "1:611944178614:web:610fb342d748b5a027d717"
-  };
+// ===== FIREBASE CONFIG =====
+const firebaseConfig = {
+  apiKey: "AIzaSyCNYAjMBgtIh64g-siP9CytOZfyRKx-BSg",
+  authDomain: "mdt-los-santos-horizon.firebaseapp.com",
+  databaseURL: "https://mdt-los-santos-horizon-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "mdt-los-santos-horizon",
+  storageBucket: "mdt-los-santos-horizon.firebasestorage.app",
+  messagingSenderId: "611944178614",
+  appId: "1:611944178614:web:610fb342d748b5a027d717"
+};
 
+// Firebase initialisieren
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
+// ===== MDT LOGIN & NAVIGATION =====
+window.login = async () => {
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('mainNav').classList.remove('hidden');
+  show('dashboard');
+}
+
+window.show = (id) => {
+  document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+// ===== REGISTER EMPLOYEE =====
+window.registerEmployee = async () => {
+  const username = document.getElementById('empUsername').value;
+  const rank = document.getElementById('empRank').value;
+  if (!username) return alert("Bitte Benutzername eingeben!");
+
+  try {
+    await addDoc(collection(db, "employees"), {
+      username,
+      rank,
+      createdAt: Timestamp.now()
+    });
+    alert(`Benutzer ${username} erfolgreich registriert!`);
+    loadEmployees();
+  } catch(err) {
+    console.error("Fehler beim Registrieren:", err);
+  }
+}
+
+// ===== LOAD EMPLOYEES =====
+const employeeList = document.getElementById('employeeList');
+async function loadEmployees() {
+  employeeList.innerHTML = "";
+  const snapshot = await getDocs(collection(db, "employees"));
+  snapshot.forEach(docSnap => {
+    const e = docSnap.data();
+    const div = document.createElement('div');
+    div.innerHTML = `👤 ${e.username} | ${e.rank}`;
+    employeeList.appendChild(div);
+  });
+}
+loadEmployees();
+
+// ===== AUDIT LOG =====
+window.writeAuditLog = async (type, targetId, action, user) => {
+  try {
+    await addDoc(collection(db, "auditLogs"), {
+      type,
+      targetId,
+      action,
+      user,
+      timestamp: Timestamp.now(),
+      immutable: true
+    });
+  } catch(err) {
+    console.error("Fehler Audit Log:", err);
+  }
+}
+
+// ===== ISSUE WARRANT =====
+window.issueWarrant = async (personId, judge) => {
+  if (!personId) return alert("Person ID fehlt!");
+  try {
+    await addDoc(collection(db, "warrants"), {
+      personId,
+      issuedBy: judge,
+      issuedAt: Timestamp.now(),
+      status: "active"
+    });
+    writeAuditLog("warrant", personId, "create", judge);
+    alert(`Haftbefehl für ${personId} ausgestellt!`);
+  } catch(err) {
+    console.error("Fehler Haftbefehl:", err);
+  }
+}
+
+// ===== TOGGLE CASE =====
+window.toggleCase = async () => {
+  const caseId = document.getElementById('caseId').value;
+  const action = document.getElementById('caseAction').value;
+  if (!caseId) return alert("Ermittlungs-ID fehlt!");
   
- window.login = async () => {
-    document.getElementById('login').classList.add('hidden');
-    document.getElementById('mainNav').classList.remove('hidden');
-    show('dashboard');
+  const caseRef = doc(db, "investigations", caseId);
+  try {
+    await updateDoc(caseRef, { locked: action === 'lock' });
+    writeAuditLog("investigation", caseId, action, "Richter");
+    alert(`Ermittlung ${caseId} ${action === 'lock' ? "gesperrt" : "freigegeben"}!`);
+  } catch(err) {
+    console.error("Fehler beim Sperren/Freigeben:", err);
   }
+}
 
-  window.show = (id) => {
-    document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
+// ===== FLAG WANTED =====
+window.flagWanted = async (personId, reason) => {
+  if (!personId) return alert("Person ID fehlt!");
+  try {
+    await addDoc(collection(db, "wanted"), {
+      personId,
+      reason,
+      flaggedAt: Timestamp.now()
+    });
+    writeAuditLog("person", personId, "flagWanted", "SYSTEM");
+    console.log("AUTO-FLAG WANTED:", personId, reason);
+  } catch(err) {
+    console.error("Fehler Wanted:", err);
   }
+}
+
+// ===== STRAFRECHNER =====
+window.calculatePenalty = (base, percent) => {
+  return Math.round(base * (percent / 100));
+};
+
+// ===== EINSATZBERICHTE =====
+let reportCounter = 1;
+window.createReportTitle = (rank, dept) => {
+  const prefix = dept === 'LSPD' ? 'LSPD-EINSATZ-' : 'LSMS-EINSATZ-';
+  return prefix + String(reportCounter++).padStart(5,'0');
+};
+
+// ===== LAWS LIST =====
+const LAWS = [
+  { id: '§1', de: 'Geschwindigkeitsüberschreitung (16 km/h über)', fine: 500, jail: 0 },
+  { id: '§2', de: 'Fahren ohne Lizenz', fine: 1500, jail: 5 }
+];
+const lawList = document.getElementById('lawList');
+LAWS.forEach(l => {
+  const div = document.createElement('div');
+  div.innerHTML = `<b>${l.id}</b> – ${l.de} | ${l.fine}$ / ${l.jail} Monate`;
+  lawList.appendChild(div);
+});
+</script>
+
+
+// ===== LOAD EMPLOYEES LIVE =====
+const employeeList = document.getElementById('employeeList');
+async function loadEmployees() {
+  employeeList.innerHTML = "";
+  const snapshot = await getDocs(collection(db, "employees"));
+  snapshot.forEach(docSnap => {
+    const e = docSnap.data();
+    const div = document.createElement('div');
+    div.innerHTML = `👤 ${e.username} | ${e.rank}`;
+    employeeList.appendChild(div);
+  });
+}
+loadEmployees();
+
+// ===== LAWS LIST =====
+const LAWS = [
+  { id: '§1', de: 'Geschwindigkeitsüberschreitung (16 km/h über)', fine: 500, jail: 0 },
+  { id: '§2', de: 'Fahren ohne Lizenz', fine: 1500, jail: 5 }
+];
+const lawList = document.getElementById('lawList');
+LAWS.forEach(l => {
+  const div = document.createElement('div');
+  div.innerHTML = `<b>${l.id}</b> – ${l.de} | ${l.fine}$ / ${l.jail} Monate`;
+  lawList.appendChild(div);
+});
+</script>
+
 
 // ===== ROLLEN & PERMISSIONS =====
 const RANKS = {
