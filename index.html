@@ -5,147 +5,48 @@
 <title>MDT – DoJ & LSPD</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
-    :root {
-      --bg:#05070f;
-      --surface:#0b1220;
-      --panel:#111827;
-      --glass:rgba(17,25,40,.75);
-      --accent:#4f46e5;
-      --accent-2:#22d3ee;
-      --danger:#ef4444;
-      --success:#22c55e;
-      --judge:#facc15;
-      --lspd:#3b82f6;
-      --marshal:#22c55e;
-      --doj:#a855f7;
-      --text:#e5e7eb;
-      --muted:#94a3b8;
-    }
-    *{box-sizing:border-box}
-    body{ margin:0; font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif; background:radial-gradient(1200px 600px at 10% -20%,#1e293b,transparent),radial-gradient(800px 400px at 90% 10%,#020617,transparent),var(--bg); color:var(--text);
-}
-.tablet{
-  max-width:1900px;
-  min-height:95vh;
-  margin:16px auto;
-  display:flex;
-  border-radius:32px;
-  overflow:hidden;
-  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
-  box-shadow:0 40px 120px rgba(0,0,0,.7);
-}
-.sidebar{
-  width:300px;
-  padding:26px 22px;
-  background:linear-gradient(180deg,#020617,#020617 60%,#020617cc);
-  border-right:1px solid rgba(255,255,255,.06);
-  display:flex;
-  flex-direction:column;
-}
-.sidebar h2{
-  font-size:22px;
-  margin-bottom:18px;
-  letter-spacing:.3px;
-}
-.sidebar button{
-  all:unset;
-  padding:14px 18px;
-  border-radius:16px;
-  margin-bottom:10px;
-  background:rgba(255,255,255,.03);
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  font-size:15px;
-  transition:.25s ease;
-}
-.sidebar button:hover{
-  background:linear-gradient(90deg,var(--accent),var(--accent-2));
-}
-.main{
-  flex:1;
-  padding:34px;
-  overflow-y:auto;
-}
-section{
-  background:var(--glass);
-  backdrop-filter: blur(20px);
-  padding:32px;
-  border-radius:28px;
-  margin-bottom:26px;
-  border:1px solid rgba(255,255,255,.08);
-}
-h3{font-size:28px;margin-bottom:18px}
-h4{font-size:18px;margin:18px 0 10px;color:var(--muted)}
-input,select,textarea{
-  width:100%;
-  padding:16px 18px;
-  margin-top:10px;
-  background:rgba(2,6,23,.85);
-  color:var(--text);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:18px;
-  font-size:15px;
-}
-textarea{min-height:140px}
-button.action{
-  margin-top:16px;
-  padding:16px 26px;
-  border-radius:20px;
-  border:none;
-  background:linear-gradient(90deg,var(--accent),var(--accent-2));
-  color:#fff;
-  font-size:15px;
-  cursor:pointer;
-}
-.role-judge{--accent:var(--judge);--accent-2:#fde047}
-.role-lspd{--accent:var(--lspd);--accent-2:#60a5fa}
-.role-marshal{--accent:var(--marshal);--accent-2:#4ade80}
-.role-doj{--accent:var(--doj);--accent-2:#c084fc}
-.card{
-  background:rgba(2,6,23,.9);
-  padding:18px 22px;
-  border-radius:20px;
-  margin-top:14px;
-  border:1px solid rgba(255,255,255,.06);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.alert{
-  background:linear-gradient(90deg,#7f1d1d,#ef4444);
-  padding:18px;
-  border-radius:20px;
-  margin-top:14px;
-  font-weight:600;
-}
-.popup{
-  position:fixed;
-  top:28px;
-  right:28px;
-  padding:20px 26px;
-  border-radius:24px;
-  background:linear-gradient(90deg,#7f1d1d,#ef4444);
-  box-shadow:0 30px 60px rgba(0,0,0,.6);
-  animation:slide .45s cubic-bezier(.4,0,.2,1);
-}
-@keyframes slide{
-  from{transform:translateX(130%)}
-  to{transform:translateX(0)}
-}
-.hidden{display:none}
+  :root {
+    --bg:#05070f; --surface:#0b1220; --panel:#111827; --glass:rgba(17,25,40,.75);
+    --accent:#4f46e5; --accent-2:#22d3ee; --danger:#ef4444; --success:#22c55e;
+    --judge:#facc15; --lspd:#3b82f6; --marshal:#22c55e; --doj:#a855f7; --text:#e5e7eb; --muted:#94a3b8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif; 
+    background:radial-gradient(1200px 600px at 10% -20%,#1e293b,transparent),
+               radial-gradient(800px 400px at 90% 10%,#020617,transparent),
+               var(--bg); color:var(--text);}
+  .tablet{max-width:1900px; min-height:95vh; margin:16px auto; display:flex; border-radius:32px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)); box-shadow:0 40px 120px rgba(0,0,0,.7);}
+  .sidebar{width:300px; padding:26px 22px; background:linear-gradient(180deg,#020617,#020617 60%,#020617cc); border-right:1px solid rgba(255,255,255,.06); display:flex; flex-direction:column;}
+  .sidebar h2{font-size:22px; margin-bottom:18px; letter-spacing:.3px;}
+  .sidebar button{all:unset; padding:14px 18px; border-radius:16px; margin-bottom:10px; background:rgba(255,255,255,.03); cursor:pointer; display:flex; align-items:center; gap:12px; font-size:15px; transition:.25s ease;}
+  .sidebar button:hover{background:linear-gradient(90deg,var(--accent),var(--accent-2));}
+  .main{flex:1; padding:34px; overflow-y:auto;}
+  section{background:var(--glass); backdrop-filter: blur(20px); padding:32px; border-radius:28px; margin-bottom:26px; border:1px solid rgba(255,255,255,.08);}
+  h3{font-size:28px;margin-bottom:18px}
+  h4{font-size:18px;margin:18px 0 10px;color:var(--muted)}
+  input,select,textarea{width:100%; padding:16px 18px; margin-top:10px; background:rgba(2,6,23,.85); color:var(--text); border:1px solid rgba(255,255,255,.08); border-radius:18px; font-size:15px;}
+  textarea{min-height:140px}
+  button.action{margin-top:16px; padding:16px 26px; border-radius:20px; border:none; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; font-size:15px; cursor:pointer;}
+  .role-judge{--accent:var(--judge);--accent-2:#fde047}
+  .role-lspd{--accent:var(--lspd);--accent-2:#60a5fa}
+  .role-marshal{--accent:var(--marshal);--accent-2:#4ade80}
+  .role-doj{--accent:var(--doj);--accent-2:#c084fc}
+  .card{background:rgba(2,6,23,.9); padding:18px 22px; border-radius:20px; margin-top:14px; border:1px solid rgba(255,255,255,.06); display:flex; justify-content:space-between; align-items:center;}
+  .alert{background:linear-gradient(90deg,#7f1d1d,#ef4444); padding:18px; border-radius:20px; margin-top:14px; font-weight:600;}
+  .popup{position:fixed; top:28px; right:28px; padding:20px 26px; border-radius:24px; background:linear-gradient(90deg,#7f1d1d,#ef4444); box-shadow:0 30px 60px rgba(0,0,0,.6); animation:slide .45s cubic-bezier(.4,0,.2,1);}
+  @keyframes slide{from{transform:translateX(130%)} to{transform:translateX(0)}}
+  .hidden{display:none}
 </style>
 </head>
 <body>
 <div class="tablet split">
 
- <header>
+  <header>
     <h2>📱 MDT System</h2>
     <div id="userInfo"></div>
   </header>
 
-   <section id="login">
+  <section id="login">
     <h3>Login</h3>
     <input id="username" placeholder="Benutzername" />
     <input id="password" type="password" placeholder="Passwort" />
@@ -163,15 +64,17 @@ button.action{
     <button onclick="show('judge')">⚖️ Richter</button>
   </nav>
 
- <section id="dashboard" class="hidden">
+  <!-- Dashboard -->
+  <section id="dashboard" class="hidden">
     <h3>Startseite</h3>
     <input placeholder="Person suchen" />
     <input placeholder="Kennzeichen suchen" />
     <input placeholder="Wanted suchen" />
     <input placeholder="Law suchen" />
-</section>
+  </section>
 
-<section id="employees" class="hidden">
+  <!-- Employees -->
+  <section id="employees" class="hidden">
     <h3>👮 Beamten-Management</h3>
     <h4>Eigene Notizen</h4>
     <textarea id="myNotes" placeholder="Private Notizen (nur für dich sichtbar)"></textarea>
@@ -188,46 +91,47 @@ button.action{
       <option>Attorney</option>
       <option>Judge</option>
     </select>
-    <button onclick="registerEmployee()">Registrieren</button>
+    <button id="registerEmployeeBtn">Registrieren</button>
     <hr />
     <h4>Beamte verwalten</h4>
     <div id="employeeList"></div>
   </section>
 
- <section id="laws" class="hidden">
+  <!-- Panel Code / Laws -->
+  <section id="laws" class="hidden">
     <h3>Panel Code</h3>
     <input placeholder="Law suchen" />
     <div id="lawList"></div>
   </section>
-  
- <section id="reports" class="hidden">
-    <h3>Einsatzberichte</h3>
-    <textarea placeholder="Einsatzbericht (Vorlage je Rang)"></textarea>
-    <button>Speichern</button>
+
+  <!-- Einsatzberichte -->
+<section id="reports" class="hidden">
+  <h3>Einsatzberichte</h3>
+  <textarea id="reportText" placeholder="Einsatzbericht (Vorlage je Rang)"></textarea>
+  <button id="saveReportBtn">Speichern</button>
 </section>
 
- <section id="persons" class="hidden">
+  <!-- Personenregister -->
+  <section id="persons" class="hidden">
     <h3>Personenregister</h3>
-    <input placeholder="Foto URL (optional)" />
-    <input placeholder="Vorname" />
-    <input placeholder="Nachname" />
-    <input placeholder="Geburtsdatum" />
-    <input placeholder="Größe" />
-    <input placeholder="Alias" />
-    <input placeholder="Wohnhaft" />
-    <button>Person anlegen</button>
+    <input id="firstName" placeholder="Vorname" />
+    <input id="lastName" placeholder="Nachname" />
+    <input id="birthDate" placeholder="Geburtsdatum" />
+    <button id="addPersonBtn">Person anlegen</button>
   </section>
 
- <section id="vehicles" class="hidden">
-    <h3>Fahrzeugregister</h3>
-    <input placeholder="Marke" />
-    <input placeholder="Modell" />
-    <input placeholder="Farbe" />
-    <input placeholder="Kennzeichen" />
-    <button>Fahrzeug registrieren</button>
-  </section>
-
- <section id="wanted" class="hidden">
+  <!-- Fahrzeug-Register -->
+<section id="vehicles" class="hidden">
+  <h3>Fahrzeugregister</h3>
+  <input id="vehicleBrand" placeholder="Marke" />
+  <input id="vehicleModel" placeholder="Modell" />
+  <input id="vehicleColor" placeholder="Farbe" />
+  <input id="vehiclePlate" placeholder="Kennzeichen" />
+  <button id="addVehicleBtn">Fahrzeug registrieren</button>
+</section>
+    
+  <!-- Wanted -->
+  <section id="wanted" class="hidden">
     <h3>🚨 Live-Fahndung</h3>
     <select id="wantedPerson"></select>
     <textarea id="wantedReason" placeholder="Grund für Fahndung"></textarea>
@@ -238,7 +142,8 @@ button.action{
     <button id="checkPlateBtn">Check</button>
     <div id="alertBox"></div>
   </section>
-  
+
+  <!-- Richter -->
   <section id="judge" class="hidden">
     <h3>⚖️ Richter-Dashboard</h3>
     <h4>Haftbefehl</h4>
@@ -254,32 +159,38 @@ button.action{
     </select>
     <button id="toggleCaseBtn">Ausführen</button>
   </section>
+
 </div>
 
+    <!-- =================== JS =================== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getFirestore, collection, doc, addDoc, getDocs, updateDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getFirestore, collection, doc, addDoc, getDocs, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
 // ===== FIREBASE CONFIG =====
 const firebaseConfig = {
   apiKey: "AIzaSyCNYAjMBgtIh64g-siP9CytOZfyRKx-BSg",
   authDomain: "mdt-los-santos-horizon.firebaseapp.com",
-  databaseURL: "https://mdt-los-santos-horizon-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "mdt-los-santos-horizon",
   storageBucket: "mdt-los-santos-horizon.firebasestorage.app",
   messagingSenderId: "611944178614",
   appId: "1:611944178614:web:610fb342d748b5a027d717"
 };
 
-// Firebase initialisieren
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// ===== SECTION SHOW/HIDE =====
+window.show = (id) => {
+  document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+};
 
 // ===== LOGIN =====
 document.getElementById('loginBtn').addEventListener('click', async () => {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
-  // Einfaches Firestore-Login: Mitarbeitername + optional Passwort
   const snapshot = await getDocs(collection(db, "employees"));
   let found = false;
   snapshot.forEach(docSnap => {
@@ -287,6 +198,7 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
     if (e.username === username && (!e.password || e.password === password)) {
       found = true;
       document.getElementById('userInfo').textContent = `Eingeloggt: ${username} | Rang: ${e.rank}`;
+      window.currentUser = e; // speichere User global
     }
   });
 
@@ -298,113 +210,17 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
     alert("Benutzername oder Passwort falsch!");
   }
 });
-  
-// ===== LOAD EMPLOYEES =====
-const employeeList = document.getElementById('employeeList');
-async function loadEmployees() {
-  employeeList.innerHTML = "";
-  const snapshot = await getDocs(collection(db, "employees"));
-  snapshot.forEach(docSnap => {
-    const e = docSnap.data();
-    const div = document.createElement('div');
-    div.innerHTML = `👤 ${e.username} | ${e.rank}`;
-    employeeList.appendChild(div);
-  });
-}
-loadEmployees();
 
 // ===== AUDIT LOG =====
 window.writeAuditLog = async (type, targetId, action, user) => {
   try {
     await addDoc(collection(db, "auditLogs"), {
-      type,
-      targetId,
-      action,
-      user,
-      timestamp: Timestamp.now(),
-      immutable: true
+      type, targetId, action, user, timestamp: serverTimestamp(), immutable: true
     });
-  } catch(err) {
-    console.error("Fehler Audit Log:", err);
-  }
-}
-
-// ===== ISSUE WARRANT =====
-window.issueWarrant = async (personId, judge) => {
-  if (!personId) return alert("Person ID fehlt!");
-  try {
-    await addDoc(collection(db, "warrants"), {
-      personId,
-      issuedBy: judge,
-      issuedAt: Timestamp.now(),
-      status: "active"
-    });
-    writeAuditLog("warrant", personId, "create", judge);
-    alert(`Haftbefehl für ${personId} ausgestellt!`);
-  } catch(err) {
-    console.error("Fehler Haftbefehl:", err);
-  }
-}
-
-// ===== TOGGLE CASE =====
-window.toggleCase = async () => {
-  const caseId = document.getElementById('caseId').value;
-  const action = document.getElementById('caseAction').value;
-  if (!caseId) return alert("Ermittlungs-ID fehlt!");
-  
-  const caseRef = doc(db, "investigations", caseId);
-  try {
-    await updateDoc(caseRef, { locked: action === 'lock' });
-    writeAuditLog("investigation", caseId, action, "Richter");
-    alert(`Ermittlung ${caseId} ${action === 'lock' ? "gesperrt" : "freigegeben"}!`);
-  } catch(err) {
-    console.error("Fehler beim Sperren/Freigeben:", err);
-  }
-}
-
-// ===== FLAG WANTED =====
-window.flagWanted = async (personId, reason) => {
-  if (!personId) return alert("Person ID fehlt!");
-  try {
-    await addDoc(collection(db, "wanted"), {
-      personId,
-      reason,
-      flaggedAt: Timestamp.now()
-    });
-    writeAuditLog("person", personId, "flagWanted", "SYSTEM");
-    console.log("AUTO-FLAG WANTED:", personId, reason);
-  } catch(err) {
-    console.error("Fehler Wanted:", err);
-  }
-}
-
-// ===== STRAFRECHNER =====
-window.calculatePenalty = (base, percent) => {
-  return Math.round(base * (percent / 100));
+  } catch(err) { console.error("Audit Log Fehler:", err); }
 };
 
-// ===== EINSATZBERICHTE =====
-let reportCounter = 1;
-window.createReportTitle = (rank, dept) => {
-  const prefix = dept === 'LSPD' ? 'LSPD-EINSATZ-' : 'LSMS-EINSATZ-';
-  return prefix + String(reportCounter++).padStart(5,'0');
-};
-
-// ===== LAWS LIST =====
-const LAWS = [
-  { id: '§1', de: 'Geschwindigkeitsüberschreitung (16 km/h über)', fine: 500, jail: 0 },
-  { id: '§2', de: 'Fahren ohne Lizenz', fine: 1500, jail: 5 }
-];
-const lawList = document.getElementById('lawList');
-LAWS.forEach(l => {
-  const div = document.createElement('div');
-  div.innerHTML = `<b>${l.id}</b> – ${l.de} | ${l.fine}$ / ${l.jail} Monate`;
-  lawList.appendChild(div);
-});
-</script>
-
-
-// ===== LOAD EMPLOYEES LIVE =====
+// ===== EMPLOYEES =====
 const employeeList = document.getElementById('employeeList');
 async function loadEmployees() {
   employeeList.innerHTML = "";
@@ -412,13 +228,35 @@ async function loadEmployees() {
   snapshot.forEach(docSnap => {
     const e = docSnap.data();
     const div = document.createElement('div');
-    div.innerHTML = `👤 ${e.username} | ${e.rank}`;
+    div.textContent = `👤 ${e.username} | ${e.rank}`;
     employeeList.appendChild(div);
   });
 }
 loadEmployees();
 
-// ===== LAWS LIST =====
+// ===== REGISTER EMPLOYEE =====
+document.getElementById('registerEmployeeBtn').addEventListener('click', async () => {
+  const username = document.getElementById('empUsername').value;
+  const rank = document.getElementById('empRank').value;
+  if (!username || !rank) return alert('Bitte Benutzername und Rang ausfüllen');
+
+  try {
+    const docRef = await addDoc(collection(db, 'employees'), { username, rank, createdAt: serverTimestamp() });
+
+    const names = username.split('.');
+    await addDoc(collection(db, 'persons'), {
+      firstName: names[0] || username,
+      lastName: names[1] || 'DOE',
+      autoCreated: true,
+      createdAt: serverTimestamp()
+    });
+
+    alert('Mitarbeiter registriert und Personenakte erstellt');
+    loadEmployees();
+  } catch(err) { console.error(err); alert('Fehler beim Hinzufügen'); }
+});
+
+// ===== LAWS =====
 const LAWS = [
   { id: '§1', de: 'Geschwindigkeitsüberschreitung (16 km/h über)', fine: 500, jail: 0 },
   { id: '§2', de: 'Fahren ohne Lizenz', fine: 1500, jail: 5 }
@@ -429,35 +267,148 @@ LAWS.forEach(l => {
   div.innerHTML = `<b>${l.id}</b> – ${l.de} | ${l.fine}$ / ${l.jail} Monate`;
   lawList.appendChild(div);
 });
-</script>
 
+// ===== PERSONEN REGISTRIEREN =====
+document.getElementById('addPersonBtn').addEventListener('click', async () => {
+  const firstName = document.getElementById('firstName').value;
+  const lastName = document.getElementById('lastName').value;
+  const birthDate = document.getElementById('birthDate').value;
+  if(!firstName || !lastName || !birthDate) return alert('Bitte alle Felder ausfüllen');
 
-// ===== ROLLEN & PERMISSIONS =====
-const RANKS = {
-  LSPD_OFFICER: ['person_add','records_add','calculator'],
-  DETECTIVE: ['person_add','records_add','calculator','investigations'],
-  JUDGE: ['person_add','records_add','records_delete','calculator','investigations'],
-  CHIEF_JUSTICE: ['all'],
-  ATTORNEY_GENERAL: ['all','internal_affairs']
-};
+  try {
+    await addDoc(collection(db, 'persons'), { firstName, lastName, birthDate, createdAt: serverTimestamp() });
+    alert('Person angelegt');
+  } catch(err) { console.error(err); alert('Fehler beim Anlegen der Person'); }
+});
 
-// ===== LAWS JSON =====
-const LAWS = [
-    { id: '§1', de: 'Geschwindigkeitsüberschreitung (16 km/h über)', en: 'Speeding (10 mph over)', fine: 500, jail: 0 },
-    { id: '§2', de: 'Fahren ohne Lizenz', en: 'Driving without license', fine: 1500, jail: 5 }
-  ];
-  
- const lawList = document.getElementById('lawList');
-  LAWS.forEach(l => {
-    const div = document.createElement('div');
-    div.innerHTML = `<b>${l.id}</b> – ${l.de} | ${l.fine}$ / ${l.jail} Monate`;
-    lawList.appendChild(div);
+// ===== WANTED SYSTEM =====
+async function loadWantedPersons() {
+  const snapshot = await getDocs(collection(db, "persons"));
+  const wantedSelect = document.getElementById('wantedPerson');
+  wantedSelect.innerHTML = "";
+  snapshot.forEach(docSnap => {
+    const p = docSnap.data();
+    const option = document.createElement('option');
+    option.value = docSnap.id;
+    option.textContent = `${p.firstName} ${p.lastName}`;
+    wantedSelect.appendChild(option);
   });
+}
+loadWantedPersons();
 
-// ===== STRAFRECHNER =====
-window.calculatePenalty = (base, percent) => {
-  return Math.round(base * (percent / 100));
-};
+document.getElementById('flagWantedBtn').addEventListener('click', async () => {
+  const personId = document.getElementById('wantedPerson').value;
+  const reason = document.getElementById('wantedReason').value;
+  if (!personId || !reason) return alert("Bitte Person und Grund auswählen!");
+  try {
+    await addDoc(collection(db, "wanted"), { personId, reason, flaggedAt: serverTimestamp() });
+    writeAuditLog("person", personId, "flagWanted", window.currentUser?.username || "SYSTEM");
+    alert(`Fahndung für ${personId} ausgelöst!`);
+  } catch(err) { console.error(err); }
+});
+
+// ===== VEHICLE ALERTS =====
+async function loadVehicles() {
+  const snapshot = await getDocs(collection(db, "vehicles"));
+  const vehicleSelect = document.getElementById('vehicleSelect');
+  vehicleSelect.innerHTML = "";
+  snapshot.forEach(docSnap => {
+    const v = docSnap.data();
+    const option = document.createElement('option');
+    option.value = docSnap.id;
+    option.textContent = `${v.brand} ${v.model} (${v.plate})`;
+    vehicleSelect.appendChild(option);
+  });
+}
+loadVehicles();
+
+document.getElementById('checkPlateBtn').addEventListener('click', async () => {
+  const vehicleId = document.getElementById('vehicleSelect').value;
+  if (!vehicleId) return alert("Bitte Fahrzeug auswählen!");
+  try {
+    const docSnap = await getDoc(doc(db, "vehicles", vehicleId));
+    if (docSnap.exists()) {
+      const v = docSnap.data();
+      document.getElementById('alertBox').textContent = `Fahrzeug: ${v.brand} ${v.model} (${v.plate})`;
+    } else {
+      document.getElementById('alertBox').textContent = "Fahrzeug nicht gefunden!";
+    }
+  } catch(err) { console.error(err); }
+});
+
+// ===== RICHTER DASHBOARD =====
+async function loadJudgePersons() {
+  const snapshot = await getDocs(collection(db, "persons"));
+  const judgeSelect = document.getElementById('judgePerson');
+  judgeSelect.innerHTML = "";
+  snapshot.forEach(docSnap => {
+    const p = docSnap.data();
+    const option = document.createElement('option');
+    option.value = docSnap.id;
+    option.textContent = `${p.firstName} ${p.lastName}`;
+    judgeSelect.appendChild(option);
+  });
+}
+loadJudgePersons();
+
+async function loadCases() {
+  const snapshot = await getDocs(collection(db, "investigations"));
+  const caseSelect = document.getElementById('caseId');
+  caseSelect.innerHTML = "";
+  snapshot.forEach(docSnap => {
+    const c = docSnap.data();
+    const option = document.createElement('option');
+    option.value = docSnap.id;
+    option.textContent = `${docSnap.id} | ${c.title || "Keine Beschreibung"}`;
+    caseSelect.appendChild(option);
+  });
+}
+loadCases();
+
+document.getElementById('issueWarrantBtn').addEventListener('click', async () => {
+  const personId = document.getElementById('judgePerson').value;
+  const reason = document.getElementById('judgeReason').value;
+  const judge = window.currentUser?.username || "Richter";
+  if (!personId || !reason) return alert("Bitte Person und Begründung auswählen!");
+
+  try {
+    await addDoc(collection(db, "warrants"), { personId, reason, issuedBy: judge, issuedAt: serverTimestamp(), status: "active" });
+    writeAuditLog("warrant", personId, "create", judge);
+    alert(`Haftbefehl für ${personId} ausgestellt!`);
+  } catch(err) { console.error(err); }
+});
+
+document.getElementById('toggleCaseBtn').addEventListener('click', async () => {
+  const caseId = document.getElementById('caseId').value;
+  const action = document.getElementById('caseAction').value;
+  if (!caseId) return alert("Ermittlungs-ID fehlt!");
+  try {
+    await updateDoc(doc(db, "investigations", caseId), { locked: action === 'lock' });
+    writeAuditLog("investigation", caseId, action, window.currentUser?.username || "Richter");
+    alert(`Ermittlung ${caseId} ${action === 'lock' ? "gesperrt" : "freigegeben"}!`);
+  } catch(err) { console.error(err); }
+});
+
+    // ===== FAHRZEUG-REGISTER =====
+document.getElementById('addVehicleBtn').addEventListener('click', async () => {
+  const brand = document.getElementById('vehicleBrand').value;
+  const model = document.getElementById('vehicleModel').value;
+  const color = document.getElementById('vehicleColor').value;
+  const plate = document.getElementById('vehiclePlate').value;
+
+  if (!brand || !model || !color || !plate) return alert("Bitte alle Felder ausfüllen");
+
+  try {
+    await addDoc(collection(db, "vehicles"), {
+      brand, model, color, plate, createdAt: serverTimestamp()
+    });
+    alert(`Fahrzeug ${brand} ${model} (${plate}) registriert!`);
+    writeAuditLog("vehicle", plate, "create", window.currentUser?.username || "SYSTEM");
+    loadVehicles(); // Dropdown aktualisieren
+  } catch(err) {
+    console.error("Fehler Fahrzeug registrieren:", err);
+  }
+});
 
 // ===== EINSATZBERICHTE =====
 let reportCounter = 1;
@@ -466,154 +417,29 @@ window.createReportTitle = (rank, dept) => {
   return prefix + String(reportCounter++).padStart(5,'0');
 };
 
-// ===== WANTED SYSTEM =====
-window.flagWanted = (personId, reason) => {
-  console.log('AUTO-FLAG WANTED:', personId, reason);
-};
+document.getElementById('saveReportBtn').addEventListener('click', async () => {
+  const reportText = document.getElementById('reportText').value;
+  if (!reportText) return alert("Bitte Einsatzbericht ausfüllen");
 
-// ===== RICHTER DASHBOARD =====
-<section id="judge" class="hidden">
-  <h3>⚖️ Richter-Dashboard</h3>
+  const rank = window.currentUser?.rank || "Officer";
+  const dept = rank.includes("LSPD") ? "LSPD" : "LSMS";
+  const title = createReportTitle(rank, dept);
 
-  <h4>Haftbefehl</h4>
-  <select id="judgePerson"></select>
-  <textarea id="judgeReason" placeholder="Begründung"></textarea>
-  <button id="issueWarrantBtn">Haftbefehl ausstellen</button>
-
-  <hr />
-
-  <h4>Ermittlung sperren / freigeben</h4>
-  <select id="caseId"></select>
-  <select id="caseAction">
-    <option value="lock">Sperren</option>
-    <option value="unlock">Freigeben</option>
-  </select>
-  <button id="toggleCaseBtn">Ausführen</button>
-</section>
-<section id="wanted" class="hidden">
-  <h3>🚨 Live-Fahndung</h3>
-  <select id="wantedPerson"></select>
-  <textarea id="wantedReason" placeholder="Grund für Fahndung"></textarea>
-  <button id="flagWantedBtn">Fahndung auslösen</button>
-
-  <hr />
-  <h4>🔔 Auto-Alerts</h4>
-  <select id="vehicleSelect"></select>
-  <button id="checkPlateBtn">Check</button>
-
-  <div id="alertBox"></div>
-</section>
-
-// ===== AUTOMATISCHE PERSONENAKTE BEI REGISTRIERUNG =====
-window.registerEmployee = async () => {
-  const username = document.getElementById('empUsername').value;
-  const rank = document.getElementById('empRank').value;
-
-  const personRef = { firstName: username.split('.')[0] || username, lastName: 'DOE', autoCreated: true };
-  console.log('PERSONENAKTE ANGELEGT:', personRef);
-
-  console.log('BENUTZER REGISTRIERT:', username, rank);
-};
-
-// ===== LIVE BEAMTENLISTE =====
-const employeeList = document.getElementById('employeeList');
-const mockEmployees = [
-  { user: 'john.doe', rank: 'LSPD Officer', status: 'Online' },
-  { user: 'jane.smith', rank: 'Detective', status: 'Offline' }
-];
-
-mockEmployees.forEach(e => {
-  const div = document.createElement('div');
-  div.innerHTML = `👤 ${e.user} | ${e.rank} | <b>${e.status}</b>`;
-  employeeList.appendChild(div);
+  try {
+    await addDoc(collection(db, "reports"), {
+      title,
+      text: reportText,
+      createdBy: window.currentUser?.username || "SYSTEM",
+      createdAt: serverTimestamp()
+    });
+    alert(`Einsatzbericht "${title}" gespeichert`);
+    writeAuditLog("report", title, "create", window.currentUser?.username || "SYSTEM");
+    document.getElementById('reportText').value = ""; // Input leeren
+  } catch(err) {
+    console.error("Fehler beim Speichern des Berichts:", err);
+  }
 });
-
-// ===== FIREBASE SECURITY RULES (LOGIK) =====
-/*
-match /persons/{id} {
-  allow read: if request.auth != null;
-  allow write: if request.auth.token.rank in ['LSPD Officer','Detective','Sergeant','Judge','Chief Justice','Attorney General'];
-}
-
-match /investigations/{id} {
-  allow read, write: if request.auth.token.rank in ['Detective','Sergeant','Judge','Chief Justice','Attorney General'];
-}
-
-match /internalAffairs/{id} {
-  allow read, write: if request.auth.token.rank == 'Attorney General';
-}
-*/
-
-
-// ================== AKTEN-HISTORIE & AUDIT-LOG ==================
-
-// Jede Änderung erzeugt einen unveränderbaren Log-Eintrag
-window.writeAuditLog = (type, targetId, action, user) => {
-  const log = {
-    type, // person | record | investigation | warrant
-    targetId,
-    action, // create | update | delete | lock | unlock
-    user,
-    timestamp: new Date().toISOString(),
-    immutable: true
-  };
-  console.log('AUDIT LOG:', log);
-};
-
-// Beispiel: Akte ändern
-window.updateRecord = (recordId, user) => {
-  writeAuditLog('record', recordId, 'update', user);
-};
-
-// ================== PRODUKTIONS-FIREBASE-RULES ==================
-/*
-rules_version = '2';
-service cloud.firestore {
- match /databases/{database}/documents {
-
-  // USERS
-  match /users/{userId} {
-    allow read: if request.auth != null;
-    allow write: if request.auth.token.rank == 'Attorney General';
-  }
-
-  // PERSONS
-  match /persons/{id} {
-    allow read: if request.auth != null;
-    allow create: if request.auth.token.rank in ['LSPD Officer','Detective','Sergeant','Judge','Chief Justice','Attorney General'];
-    allow update, delete: if request.auth.token.rank in ['Judge','Chief Justice','Attorney General'];
-  }
-
-  // RECORDS
-  match /records/{id} {
-    allow read: if request.auth != null;
-    allow create, update: if request.auth.token.rank != 'LSPD Officer';
-    allow delete: if request.auth.token.rank in ['Judge','Chief Justice','Attorney General'];
-  }
-
-  // INVESTIGATIONS
-  match /investigations/{id} {
-    allow read: if request.auth.token.rank in ['Detective','Sergeant','Judge','Chief Justice','Attorney General'];
-    allow write: if request.auth.token.rank in ['Judge','Chief Justice','Attorney General']
-      && resource.data.locked != true;
-  }
-
-  // INTERNAL AFFAIRS
-  match /internalAffairs/{id} {
-    allow read, write: if request.auth.token.rank == 'Attorney General';
-  }
-
-  // AUDIT LOGS (UNVERÄNDERBAR)
-  match /auditLogs/{id} {
-    allow create: if request.auth != null;
-    allow read: if request.auth.token.rank in ['Judge','Chief Justice','Attorney General'];
-    allow update, delete: if false;
-  }
- }
-}
-*/
 
 </script>
 
-</body>
-</html>
+    
